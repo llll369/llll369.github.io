@@ -93,26 +93,9 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <h1 id="leetcode27"><a href="#leetcode27" class="headerlink" title="leetcode27"></a>leetcode27</h1><div>
-class Solution{
-public:
-    int minSubArrayLen(int s,vector<int>& nums){
-        int result = INT32_MAX;
-        int sum = 0;
-        int i = 0;
-        int subLength = 0;
-        for(int j = 0;j<=nums.size();j++){
-            sum+=nums[j];
-            while(sum>=s){
-                subLength = (j-i+1);
-                result = result<subLength?result:subLength;
-                sum -= nums[i++];
-            }
-        }
-        return result==INT32_MAX?0:result;
-    }
-};
-</div>
+        <blockquote>
+<p>class Solution{<br>public:<br>        int minSubArrayLen(int s,vector&amp; nums){<br>        int result &#x3D; INT32_MAX;<br>        int sum &#x3D; 0;<br>        int i &#x3D; 0;<br>        int subLength &#x3D; 0;<br>        for(int j &#x3D; 0;j&lt;&#x3D;nums.size();j++){<br>               sum+&#x3D;nums[j];<br>               while(sum&gt;&#x3D;s){<br>               subLength &#x3D; (j-i+1);<br>        result &#x3D; result&lt;subLength?result:subLength;<br>           sum -&#x3D; nums[i++];<br>                 }<br>           }<br> return result&#x3D;&#x3D;INT32_MAX?0:result;<br>     }<br>};</p>
+</blockquote>
 
       
     </div>

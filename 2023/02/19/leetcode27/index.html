@@ -6,15 +6,15 @@
   
   <title>leetcode27 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="leetcode27 class Solution{ public:     int minSubArrayLen(int s,vector&amp; nums){         int result &#x3D; INT32_MAX;         int sum &#x3D; 0;         int i &#x3D; 0;         int subLength &#x3D; 0;         for(int j &#x3D; 0;">
+  <meta name="description" content="class Solution{public:        int minSubArrayLen(int s,vector&amp; nums){        int result &#x3D; INT32_MAX;        int sum &#x3D; 0;        int i &#x3D; 0;        int subLength &#x3D; 0;        for">
 <meta property="og:type" content="article">
 <meta property="og:title" content="leetcode27">
 <meta property="og:url" content="http://example.com/2023/02/19/leetcode27/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="leetcode27 class Solution{ public:     int minSubArrayLen(int s,vector&amp; nums){         int result &#x3D; INT32_MAX;         int sum &#x3D; 0;         int i &#x3D; 0;         int subLength &#x3D; 0;         for(int j &#x3D; 0;">
+<meta property="og:description" content="class Solution{public:        int minSubArrayLen(int s,vector&amp; nums){        int result &#x3D; INT32_MAX;        int sum &#x3D; 0;        int i &#x3D; 0;        int subLength &#x3D; 0;        for">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-02-19T11:21:04.000Z">
-<meta property="article:modified_time" content="2023-02-19T11:22:55.596Z">
+<meta property="article:modified_time" content="2023-02-19T11:27:06.624Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
   
@@ -95,26 +95,9 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <h1 id="leetcode27"><a href="#leetcode27" class="headerlink" title="leetcode27"></a>leetcode27</h1><div>
-class Solution{
-public:
-    int minSubArrayLen(int s,vector<int>& nums){
-        int result = INT32_MAX;
-        int sum = 0;
-        int i = 0;
-        int subLength = 0;
-        for(int j = 0;j<=nums.size();j++){
-            sum+=nums[j];
-            while(sum>=s){
-                subLength = (j-i+1);
-                result = result<subLength?result:subLength;
-                sum -= nums[i++];
-            }
-        }
-        return result==INT32_MAX?0:result;
-    }
-};
-</div>
+        <blockquote>
+<p>class Solution{<br>public:<br>        int minSubArrayLen(int s,vector&amp; nums){<br>        int result &#x3D; INT32_MAX;<br>        int sum &#x3D; 0;<br>        int i &#x3D; 0;<br>        int subLength &#x3D; 0;<br>        for(int j &#x3D; 0;j&lt;&#x3D;nums.size();j++){<br>               sum+&#x3D;nums[j];<br>               while(sum&gt;&#x3D;s){<br>               subLength &#x3D; (j-i+1);<br>        result &#x3D; result&lt;subLength?result:subLength;<br>           sum -&#x3D; nums[i++];<br>                 }<br>           }<br> return result&#x3D;&#x3D;INT32_MAX?0:result;<br>     }<br>};</p>
+</blockquote>
 
       
     </div>
