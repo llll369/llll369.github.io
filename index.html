@@ -112,6 +112,96 @@ var _hmt = _hmt || [];
 
   
     
+    <h3 class="article-title"><a href="/2023/02/24/SAID(2)/"><span></span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2023/02/24/SAID(2)/" rel="bookmark">
+        <time class="entry-date published" datetime="2023-02-24T01:44:21.067Z">
+          2023-02-24
+        </time>
+      </a>
+    </span>
+    <br />
+    
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+          <h1 id="SAID-State-aware-Defense-Against-Injection-Attacks-on-In-vehicle-Network"><a href="#SAID-State-aware-Defense-Against-Injection-Attacks-on-In-vehicle-Network" class="headerlink" title="SAID: State-aware Defense Against Injection Attacks on In-vehicle Network"></a>SAID: State-aware Defense Against Injection Attacks on In-vehicle Network</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><ol>
+<li><p>车辆动力学：如何将物理学规律运用于运动中的车辆，如图所示，车辆动力学针对车辆对驾驶员或外部输入系统的反应进行建模，也就是说，车辆动力学研究如何通过转向、加速、制动来对车辆的运动状态造成影响，在本文中，我们主要应用车辆动力学模型来检测传入的消息是否会导致车辆的运动状态异常。总而言之，我们将车辆动力学按照车辆的运行状态分为横向动力学，纵向动力学和垂直动力学，以此来考虑如何检测出车辆的异常状态。</p>
+</li>
+<li><p>CAN总线协议：在使用CAN总线协议的车辆中，车载的ECU通过连接到CAN总线上进行数据交互来控制车辆的状态。ECU的通信遵守CAN协议（ISO11898）来进行通信，该协议规定了CAN总线数据帧的传输要求。CAN帧被广播到所有连接CAN总线的ECU上，ECU则筛选获得针对自己的帧进行处理。</p>
+</li>
+<li><p>诊断服务：诊断服务是介于诊断设备和ECU之间的一种信息交互方式。通常由诊断设备发出请求，ECU做出回应。诊断服务提供了一些功能，主要包括对于ECU的测试、检查ECU的工作状态、对问题进行诊断等。一般流程为ECU向诊断设备提出诊断请求，诊断设备根据请求内容查看目标ECU的工作状态和内部保存的数据，并将诊断结果发回给提出请求的ECU。除了用于强制排放相关诊断的OBD 服务外，还有两种流行的诊断服务，即UDS 和DoCAN。每个诊断服务至少涉及三种类型的诊断消息，包括请求、积极响应和消极响应。</p>
+</li>
+</ol>
+<img src="file:///C:/Users/16241/AppData/Roaming/marktext/images/2023-02-24-09-47-02-image.png" title="" alt="" data-align="center">
+
+<hr>
+<h2 id="方法综述"><a href="#方法综述" class="headerlink" title="方法综述"></a>方法综述</h2><h3 id="威胁模型"><a href="#威胁模型" class="headerlink" title="威胁模型"></a>威胁模型</h3><p>本文主要考虑从车辆外部（比如远程信息处理，OBD-Ⅱ端口，T-box和传感器）向IVN中注入异常数据发起的攻击，我们关注两类从车辆外部发起的攻击；</p>
+<ul>
+<li><p>针对功能的攻击：这类攻击主要通过注入攻击流量，导致IVN发生故障，例如欺骗攻击，Dos攻击，模糊攻击，总线关闭攻击等。这类攻击主要通过占据车载网络传输信道，欺骗ECU等进行攻击，利用的是外部的信息传输装置或IVN本身存在的漏洞，不需要攻击者对于IVN本身有很好的了解；</p>
+</li>
+<li><p>针对状态的攻击：这类攻击的目标是导致车辆的运动状态发生异常，比如侧翻、转向角过大&#x2F;过小，或在没有给出转向信号的情况下进行转向。与基于功能的攻击不同，这类攻击不会对IVN或外部的信息传输工具的工作产生影响，而是通过向IVN中注入特殊的信息，控制车辆做出错误的运动。比如，通过入侵OBD-Ⅱ端口，攻击者可以使车辆在转弯时持续加速，导致侧翻。或者通过欺骗传感器让车辆进入异常状态。</p>
+</li>
+</ul>
+<p>针对以上两类攻击，SAID能同时对其进行检测，而在完成SAID前，需要对以下条件进行确认：首先，我们需要在搭载了传感器（加速计、陀螺仪）的硬件上完成SAID，因为对于SAID的检测来说，车载传感器的数据是必要的；其次，我们假设SAID使用的软件和硬件都是可靠的，并且可以获得IVN的DBC文件，这对于我们解析IVN传递的信息是必要的。最后，在进行车辆动态状态估计时，我们需要获得车辆的重心，这一点在厂家提供的车辆参数中会给出。<br>SAID完成后，部署在IVN和车外实体之间，由于IVN采用多层模型，每层协议不同，因此在三层(即网络层、服务层和状态层)上对所有传入数据进行检测。对于以上两类注入攻击的防御场景如下：</p>
+<ul>
+<li><p>针对功能的攻击：在网络层和服务层，SAID分别通过检测传入的CAN帧和诊断消息来应对攻击。换言之，SAID根据网络层和服务层的传输规范，检查传入的消息是否违反规范，同时，SAID也会根据目前已有的在这两个层级的检测规则来检测功能性攻击；</p>
+</li>
+<li><p>针对状态的攻击：SAID通过判断车辆目前的运动状态和解析传入消息的语义来防御攻击。对于通过网络层和服务层检验，格式良好的信息，SAID检查其是否会造成车辆状态异常。通过对车辆的运行规则（比如在转向时需要开转向灯）和车辆危险运动的判定（比如侧翻、打滑），防御这类格式不存在问题，但会造成异常运动状态的攻击</p>
+</li>
+</ul>
+<h3 id="攻击检测方法"><a href="#攻击检测方法" class="headerlink" title="攻击检测方法"></a>攻击检测方法</h3><p>SAID采用的基于动态的方法专注于检测注入的攻击信息，这类攻击意在触发车辆危险的动态状态。因此，我们估计了车辆的动态状态，并进一步利用动态状态的代表性指数来表示动态风险。</p>
+<p>下面从三个层级上对入侵进行检测</p>
+<ol>
+<li><p>网络层：在IVN（本文使用CAN）中，所有的消息在CAN中都通过CAN帧进行传输，因此，SAID通过CAN总线传输规范、先前研究提出的检测方案和官方技术报告中的策略，来检查异常的CAN帧。具体来说，SAID首先检查网络层的CAN帧格式和是否按照协议规范进行传输。对于合法帧，SAID再根据其传输模式进行检测，比如，如果ECU传输了大量高优先级的CAN帧，SAID就会认为其发动了Dos攻击。如果网络层检查没有问题，就将数据帧按照单帧或多帧的传输方案组装成诊断信息，传入服务层进行下一步检查；</p>
+</li>
+<li><p>服务层：在服务层，SAID通过构造诊断请求，根据协议规范检测网络层组装的诊断信息是否符合协议规范（ISO 15031-5、ISO 14227 -1&#x2F;2&#x2F;3、ISO 15765-3&#x2F;4），通过该方法检测违反规定格式和协议规范的攻击信息。如果服务层也没有问题，则将该信息在状态层进行检测。</p>
+</li>
+<li><p>状态层：在状态层，SAID检查传入信息，同时考虑它的语义和车辆目前的运动状态。如果传入的信息会造成车辆的异常状态，则SAID将拒绝该消息并发出警报。SAID会对车辆运动和车辆部件的状态进行判定（这一部分由驾驶规范确定）；</p>
+</li>
+</ol>
+<p>在车辆状态估计过程中，SAID不断通过诊断服务向车载传感器和IVN获取车辆状态的上下文信息，并利用它们，根据车辆动力学模型判断当前车辆的运行状态。SAID部署在IVN与外部实体之间，如果发现一条信息如果进入IVN会导致车辆进入危险的运行状态或违反驾驶规定，SAID会阻止该消息并发出警报。<br>状态感知检测为基于网络规范（即网络和服务层）的防御提供状态信息，并根据车辆状态做出决策。同时，基于规范的防御模块提取消息语义进行状态感知检测，可以提高防御的有效性。此外，SAID收集车载环境信息（加速度和角速度）和车内环境信息（速度，转向角度等）用于状态感知检测，使用环境信息来估计车辆的动态状态，并进一步利用这些状态信息来决定通过网络层检测的数据能否发送入IVN。</p>
+
+      
+    </div>
+    
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+  
+    
+    <h3 class="article-read"><a href="/2023/02/24/SAID(2)/"><span>more</span></a></h3>
+    
+  
+</article>
+
+
+
+
+
+  <article class="article-container ">
+
+  
+    
     <h3 class="article-title"><a href="/2023/02/23/SAID(1)/"><span></span></a></h3>
     
   
@@ -134,7 +224,12 @@ var _hmt = _hmt || [];
   <div class="article-content">
     <div class="entry">
       
-          <h1 id="SAID-State-aware-Defense-Against-Injection-Attacks-on-In-vehicle-Network"><a href="#SAID-State-aware-Defense-Against-Injection-Attacks-on-In-vehicle-Network" class="headerlink" title="SAID: State-aware Defense Against Injection Attacks on In-vehicle Network"></a>SAID: State-aware Defense Against Injection Attacks on In-vehicle Network</h1><h4 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h4><p>现代的汽车装载了很多电子控制单元（ECU），这些ECU与车载网络（IVN）相连接，用来控制车辆（ECU如何与车载网络连接控制车辆：获得数据后，通过CAN控制器将数据封装为电平信号，在通过电压在总线间传输，用于处理的节点获得数据后，解析其含义，控制车辆的运行）。与此同时，大量的汽车接口，例如OBD-Ⅱ、传感器、远程控制接口、T-box等，实现车辆内部网络和外部环境的交互。虽然这些接口为车辆网络提供了丰富的功能，比如远程诊断服务和远程升级技术，但攻击者可以通过这些接口向IVN中注入恶意数据，导致严重的安全问题。然而，目前针对CAN的防御手段主要集中在分析CAN帧来抵御通过IVN发起的攻击，例如通过恶意的&#x2F;被攻击控制的ECU发起的攻击，这种防御手段主要分析CAN的数据帧结构是否存在问题，但无法防御会导致车辆运动状态发生异常的高层注入攻击（MIA）。本文提出了一种新的攻击检测方法SAID，它通过状态感知来抵御注入攻击。它结合传入消息的语义和车辆目前的状态，分析传入消息是否是针对高层级的注入攻击（MIA），防止与车辆相连的设备发起注入攻击。文章开发了一个SAID模型用来防御MIA，并且使用真实道路数据和仿真软件数据对其进行了评估，评估结果表示，本文开发的SAID模型能够防御99%的网络和服务层攻击流量和所有的状态层注入攻击。</p>
+          <h1 id="SAID-State-aware-Defense-Against-Injection-Attacks-on-In-vehicle-Network"><a href="#SAID-State-aware-Defense-Against-Injection-Attacks-on-In-vehicle-Network" class="headerlink" title="SAID: State-aware Defense Against Injection Attacks on In-vehicle Network"></a>SAID: State-aware Defense Against Injection Attacks on In-vehicle Network</h1><blockquote>
+<p>IVN：车载网络</p>
+<p>ECU：电子控制单元</p>
+<p>MIA：注入攻击</p>
+</blockquote>
+<h4 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h4><p>现代的汽车装载了很多电子控制单元（ECU），这些ECU与车载网络（IVN）相连接，用来控制车辆（ECU如何与车载网络连接控制车辆：获得数据后，通过CAN控制器将数据封装为电平信号，在通过电压在总线间传输，用于处理的节点获得数据后，解析其含义，控制车辆的运行）。与此同时，大量的汽车接口，例如OBD-Ⅱ、传感器、远程控制接口、T-box等，实现车辆内部网络和外部环境的交互。虽然这些接口为车辆网络提供了丰富的功能，比如远程诊断服务和远程升级技术，但攻击者可以通过这些接口向IVN中注入恶意数据，导致严重的安全问题。然而，目前针对CAN的防御手段主要集中在分析CAN帧来抵御通过IVN发起的攻击，例如通过恶意的&#x2F;被攻击控制的ECU发起的攻击，这种防御手段主要分析CAN的数据帧结构是否存在问题，但无法防御会导致车辆运动状态发生异常的高层注入攻击（MIA）。本文提出了一种新的攻击检测方法SAID，它通过状态感知来抵御注入攻击。它结合传入消息的语义和车辆目前的状态，分析传入消息是否是针对高层级的注入攻击（MIA），防止与车辆相连的设备发起注入攻击。文章开发了一个SAID模型用来防御MIA，并且使用真实道路数据和仿真软件数据对其进行了评估，评估结果表示，本文开发的SAID模型能够防御99%的网络和服务层攻击流量和所有的状态层注入攻击。</p>
 <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>现代车辆使用了很多软件驱动的ECU、传感器和执行器。它们实现了车辆的功能并对车辆进行控制，比如ABS（防抱死系统）和娱乐系统。它们与车载网络相连，比如CAN（控制器局域网）、LIN（本地连接网络）、Flexray等。由于目前CAN总线在现代汽车上的覆盖很广，我们选择在CAN上进行研究，但SAID同样可以在其他车载网络上进行运用。</p>
 <p>对于车载网络和ECU的攻击会造成严重的危害，随着越来越多的车辆提供接口（OBD-Ⅱ、T-box等）与外部实体（比如诊断设备、网络、传感器）进行通信，越来越多的攻击者利用这些新的攻击面来进行攻击。例如，攻击者可以远程控制一辆在高速公路行驶的吉普车，再比如攻击者利用汽车公司提供的远程诊断服务，控制车辆的车门，窗户和后视镜。所有的这些攻击，都是攻击者通过暴露在外部的接口，向IVN注入特定的数据完成的。</p>
 <p>为了保护IVN免受注入攻击，目前的研究方法分为两类，分别是消息认证和异常检测。消息认证主要通过对消息进行加密，来丢弃未经授权的命令，但是考虑到ECU计算资源有限，在实际情况下很难用来保护IVN，此外，它们不能阻止被破坏的ECU向IVN注入消息，因为攻击者可以直接使用ECU的加密算法进行消息注入。异常检测则利用消息帧的许多特征来发现攻击，比如IVN的熵、消息间隔、消息的相关性、ECU指纹、通信特征等。</p>

@@ -1,0 +1,336 @@
+<!DOCTYPE HTML>
+<html>
+<head >
+  <meta charset="utf-8">
+  
+  <title>Hexo</title>
+
+  
+  <meta name="author" content="John Doe">
+  
+
+  
+  <meta name="description" content="SAID: State-aware Defense Against Injection Attacks on In-vehicle Network背景
+车辆动力学：如何将物理学规律运用于运动中的车辆，如图所示，车辆动力学针对车辆对驾驶员或外部输入系统的反应进行建模，也就是说，车辆动力学研究如何通过转">
+  
+
+  
+  
+  <meta name="keywords" content="">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="Hexo"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+  
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-5005349780815724",
+    enable_page_level_ads: true
+  });
+</script>
+
+  
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?223eea22355699157e147870eb124b24";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+  <link rel="manifest" href="/manifest.json">
+  <link href="/favicon.ico" rel="icon">
+
+  <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    
+
+    <header class="header-container" style="background-image: url('/images/blog-bg.jpg');">
+
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header page-scroll">
+          <button type="button" id="tglBtn" class="navbar-toggle">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">John Doe</a>
+        </div>
+        <div id="bosenyblog-navbar">
+          <div class="navbar-collapse" id="bs-example-navbar-collapse-6">
+            <ul class="nav navbar-nav navbar-right">
+            
+              <li><a href="/">Home</a></li>
+            
+              <li><a href="/archives">Archives</a></li>
+            
+              <li><a href="/about">About</a></li>
+            
+              <li><a href="/tags">Tags</a></li>
+            
+            </ul>
+          </div>
+        </div>
+
+    </div>
+ </nav>
+ <div class="gotop-btn">
+
+ </div>
+</header>
+
+        
+          <div class="container ">
+          <div class="row">
+            <main class="site-main posts-loop col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container" style="position: inherit;">
+            <article class="article-container ">
+
+  
+    
+    <h3 class="article-title"><span></span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2023/02/24/SAID(2)/" rel="bookmark">
+        <time class="entry-date published" datetime="2023-02-24T01:44:21.067Z">
+          2023-02-24
+        </time>
+      </a>
+    </span>
+    <br />
+    
+    <span id="busuanzi_container_page_pv">
+      本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+          <h1 id="SAID-State-aware-Defense-Against-Injection-Attacks-on-In-vehicle-Network"><a href="#SAID-State-aware-Defense-Against-Injection-Attacks-on-In-vehicle-Network" class="headerlink" title="SAID: State-aware Defense Against Injection Attacks on In-vehicle Network"></a>SAID: State-aware Defense Against Injection Attacks on In-vehicle Network</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><ol>
+<li><p>车辆动力学：如何将物理学规律运用于运动中的车辆，如图所示，车辆动力学针对车辆对驾驶员或外部输入系统的反应进行建模，也就是说，车辆动力学研究如何通过转向、加速、制动来对车辆的运动状态造成影响，在本文中，我们主要应用车辆动力学模型来检测传入的消息是否会导致车辆的运动状态异常。总而言之，我们将车辆动力学按照车辆的运行状态分为横向动力学，纵向动力学和垂直动力学，以此来考虑如何检测出车辆的异常状态。</p>
+</li>
+<li><p>CAN总线协议：在使用CAN总线协议的车辆中，车载的ECU通过连接到CAN总线上进行数据交互来控制车辆的状态。ECU的通信遵守CAN协议（ISO11898）来进行通信，该协议规定了CAN总线数据帧的传输要求。CAN帧被广播到所有连接CAN总线的ECU上，ECU则筛选获得针对自己的帧进行处理。</p>
+</li>
+<li><p>诊断服务：诊断服务是介于诊断设备和ECU之间的一种信息交互方式。通常由诊断设备发出请求，ECU做出回应。诊断服务提供了一些功能，主要包括对于ECU的测试、检查ECU的工作状态、对问题进行诊断等。一般流程为ECU向诊断设备提出诊断请求，诊断设备根据请求内容查看目标ECU的工作状态和内部保存的数据，并将诊断结果发回给提出请求的ECU。除了用于强制排放相关诊断的OBD 服务外，还有两种流行的诊断服务，即UDS 和DoCAN。每个诊断服务至少涉及三种类型的诊断消息，包括请求、积极响应和消极响应。</p>
+</li>
+</ol>
+<img src="file:///C:/Users/16241/AppData/Roaming/marktext/images/2023-02-24-09-47-02-image.png" title="" alt="" data-align="center">
+
+<hr>
+<h2 id="方法综述"><a href="#方法综述" class="headerlink" title="方法综述"></a>方法综述</h2><h3 id="威胁模型"><a href="#威胁模型" class="headerlink" title="威胁模型"></a>威胁模型</h3><p>本文主要考虑从车辆外部（比如远程信息处理，OBD-Ⅱ端口，T-box和传感器）向IVN中注入异常数据发起的攻击，我们关注两类从车辆外部发起的攻击；</p>
+<ul>
+<li><p>针对功能的攻击：这类攻击主要通过注入攻击流量，导致IVN发生故障，例如欺骗攻击，Dos攻击，模糊攻击，总线关闭攻击等。这类攻击主要通过占据车载网络传输信道，欺骗ECU等进行攻击，利用的是外部的信息传输装置或IVN本身存在的漏洞，不需要攻击者对于IVN本身有很好的了解；</p>
+</li>
+<li><p>针对状态的攻击：这类攻击的目标是导致车辆的运动状态发生异常，比如侧翻、转向角过大&#x2F;过小，或在没有给出转向信号的情况下进行转向。与基于功能的攻击不同，这类攻击不会对IVN或外部的信息传输工具的工作产生影响，而是通过向IVN中注入特殊的信息，控制车辆做出错误的运动。比如，通过入侵OBD-Ⅱ端口，攻击者可以使车辆在转弯时持续加速，导致侧翻。或者通过欺骗传感器让车辆进入异常状态。</p>
+</li>
+</ul>
+<p>针对以上两类攻击，SAID能同时对其进行检测，而在完成SAID前，需要对以下条件进行确认：首先，我们需要在搭载了传感器（加速计、陀螺仪）的硬件上完成SAID，因为对于SAID的检测来说，车载传感器的数据是必要的；其次，我们假设SAID使用的软件和硬件都是可靠的，并且可以获得IVN的DBC文件，这对于我们解析IVN传递的信息是必要的。最后，在进行车辆动态状态估计时，我们需要获得车辆的重心，这一点在厂家提供的车辆参数中会给出。<br>SAID完成后，部署在IVN和车外实体之间，由于IVN采用多层模型，每层协议不同，因此在三层(即网络层、服务层和状态层)上对所有传入数据进行检测。对于以上两类注入攻击的防御场景如下：</p>
+<ul>
+<li><p>针对功能的攻击：在网络层和服务层，SAID分别通过检测传入的CAN帧和诊断消息来应对攻击。换言之，SAID根据网络层和服务层的传输规范，检查传入的消息是否违反规范，同时，SAID也会根据目前已有的在这两个层级的检测规则来检测功能性攻击；</p>
+</li>
+<li><p>针对状态的攻击：SAID通过判断车辆目前的运动状态和解析传入消息的语义来防御攻击。对于通过网络层和服务层检验，格式良好的信息，SAID检查其是否会造成车辆状态异常。通过对车辆的运行规则（比如在转向时需要开转向灯）和车辆危险运动的判定（比如侧翻、打滑），防御这类格式不存在问题，但会造成异常运动状态的攻击</p>
+</li>
+</ul>
+<h3 id="攻击检测方法"><a href="#攻击检测方法" class="headerlink" title="攻击检测方法"></a>攻击检测方法</h3><p>SAID采用的基于动态的方法专注于检测注入的攻击信息，这类攻击意在触发车辆危险的动态状态。因此，我们估计了车辆的动态状态，并进一步利用动态状态的代表性指数来表示动态风险。</p>
+<p>下面从三个层级上对入侵进行检测</p>
+<ol>
+<li><p>网络层：在IVN（本文使用CAN）中，所有的消息在CAN中都通过CAN帧进行传输，因此，SAID通过CAN总线传输规范、先前研究提出的检测方案和官方技术报告中的策略，来检查异常的CAN帧。具体来说，SAID首先检查网络层的CAN帧格式和是否按照协议规范进行传输。对于合法帧，SAID再根据其传输模式进行检测，比如，如果ECU传输了大量高优先级的CAN帧，SAID就会认为其发动了Dos攻击。如果网络层检查没有问题，就将数据帧按照单帧或多帧的传输方案组装成诊断信息，传入服务层进行下一步检查；</p>
+</li>
+<li><p>服务层：在服务层，SAID通过构造诊断请求，根据协议规范检测网络层组装的诊断信息是否符合协议规范（ISO 15031-5、ISO 14227 -1&#x2F;2&#x2F;3、ISO 15765-3&#x2F;4），通过该方法检测违反规定格式和协议规范的攻击信息。如果服务层也没有问题，则将该信息在状态层进行检测。</p>
+</li>
+<li><p>状态层：在状态层，SAID检查传入信息，同时考虑它的语义和车辆目前的运动状态。如果传入的信息会造成车辆的异常状态，则SAID将拒绝该消息并发出警报。SAID会对车辆运动和车辆部件的状态进行判定（这一部分由驾驶规范确定）；</p>
+</li>
+</ol>
+<p>在车辆状态估计过程中，SAID不断通过诊断服务向车载传感器和IVN获取车辆状态的上下文信息，并利用它们，根据车辆动力学模型判断当前车辆的运行状态。SAID部署在IVN与外部实体之间，如果发现一条信息如果进入IVN会导致车辆进入危险的运行状态或违反驾驶规定，SAID会阻止该消息并发出警报。<br>状态感知检测为基于网络规范（即网络和服务层）的防御提供状态信息，并根据车辆状态做出决策。同时，基于规范的防御模块提取消息语义进行状态感知检测，可以提高防御的有效性。此外，SAID收集车载环境信息（加速度和角速度）和车内环境信息（速度，转向角度等）用于状态感知检测，使用环境信息来估计车辆的动态状态，并进一步利用这些状态信息来决定通过网络层检测的数据能否发送入IVN。</p>
+
+      
+    </div>
+    
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+  
+    
+    
+  
+</article>
+   
+    <div id="toc" class="toc-article ">
+    <div class="toc-title">目录</div>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SAID-State-aware-Defense-Against-Injection-Attacks-on-In-vehicle-Network"><span class="toc-number">1.</span> <span class="toc-text">SAID: State-aware Defense Against Injection Attacks on In-vehicle Network</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E7%BB%BC%E8%BF%B0"><span class="toc-number">1.2.</span> <span class="toc-text">方法综述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A8%81%E8%83%81%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.2.1.</span> <span class="toc-text">威胁模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%A3%80%E6%B5%8B%E6%96%B9%E6%B3%95"><span class="toc-number">1.2.2.</span> <span class="toc-text">攻击检测方法</span></a></li></ol></li></ol></li></ol>
+</div>
+
+
+  
+
+	<!-- async load  -->
+	<script>
+			function async(u, c) {
+				var d = document, t = 'script',
+						o = d.createElement(t),
+						s = d.getElementsByTagName(t)[0];
+				o.src = u;
+				if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+				s.parentNode.insertBefore(o, s);
+			}
+	</script>
+	<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+	<script>
+			async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+					anchors.options = {
+						visible: 'hover',
+						placement: 'left',
+						// icon: '#'
+					};
+					anchors.add().remove('.article-title').remove('.subheading').remove('.sidebar-container h5');
+			})
+	</script>
+	<style>
+			/* place left on bigger screen */
+			@media all and (min-width: 800px) {
+					.anchorjs-link{
+							position: absolute;
+							left: -0.75em;
+							font-size: 1.1em;
+							margin-top : -0.1em;
+					}
+			}
+	</style>
+
+
+
+
+<!-- UY BEGIN -->
+	<div id="gitment-container"></div>
+	<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+	<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+	<script src="/js/web-pinyin.js"></script>
+	<script>
+		function toUnicode(s){ 
+			return s.replace(/([\u4E00-\u9FA5]|[\uFE30-\uFFA0])/g,function(){
+			return "\\u" + RegExp["$1"].charCodeAt(0).toString(16);
+			});
+		}
+		var title = ''
+		var GitHub_id = 'Boseny'
+		var client_id = 'f40c67d0359a2646d2b1'
+		var client_secret = '1cbedbd1a1a2e4b42901aee3d7afe1856c1b7e2d'
+		var repo = 'boseny.me'
+		var gitment = new Gitment({
+		// id: '页面 ID', // 可选。默认为 location.href
+		// id:"11" ,
+		id: title,
+		title: title,
+		owner: GitHub_id,//'你的 GitHub ID',
+		repo: repo,//'存储评论的 repo',
+		oauth: {
+			client_id: client_id,//'你的 client ID',
+			client_secret: client_secret,//'你的 client secret',
+		},
+		})
+		gitment.render('gitment-container')
+	</script>
+<!-- UY END -->
+
+
+
+
+            </main>
+          </div>
+        </div>
+       
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/BosenY/Lap" target="_blank">Lap</a>
+    <br/><span id="busuanzi_container_site_uv"> 
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+    </br>
+    
+      
+        &copy; 2023 John Doe
+      
+    
+  </p>
+</footer>
+    
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-92842840-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+
+  </div>
+
+</div>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+  <script src="https://unpkg.com/draw-something/dist/draw.min.js"></script>
+  <script>
+    let maxNum = Number.parseInt('10')
+    let iconText = '❤'
+    let color = 'blue'
+    new Draw({maxNum, iconText, color})
+  </script>
+
+<script src="/js/index.js"></script>
+<script src="/js/search.js"></script>
+
+</body>
+</html>
