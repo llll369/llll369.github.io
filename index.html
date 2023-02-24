@@ -186,63 +186,6 @@ var _hmt = _hmt || [];
 
   
     
-    <h3 class="article-title"><a href="/2023/02/19/leetcode27/"><span>leetcode27</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2023/02/19/leetcode27/" rel="bookmark">
-        <time class="entry-date published" datetime="2023-02-19T11:21:04.000Z">
-          2023-02-19
-        </time>
-      </a>
-    </span>
-    <br />
-    
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-          <blockquote>
-<p>class Solution{<br>public:<br>        int minSubArrayLen(int s,vector&amp; nums){<br>        int result &#x3D; INT32_MAX;<br>        int sum &#x3D; 0;<br>        int i &#x3D; 0;<br>        int subLength &#x3D; 0;<br>        for(int j &#x3D; 0;j&lt;&#x3D;nums.size();j++){<br>               sum+&#x3D;nums[j];<br>               while(sum&gt;&#x3D;s){<br>               subLength &#x3D; (j-i+1);<br>        result &#x3D; result&lt;subLength?result:subLength;<br>           sum -&#x3D; nums[i++];<br>                 }<br>           }<br> return result&#x3D;&#x3D;INT32_MAX?0:result;<br>     }<br>};</p>
-</blockquote>
-
-      
-    </div>
-    
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-
-    
-
-    </div>
-
-    
-  </div>
-  
-    
-    <h3 class="article-read"><a href="/2023/02/19/leetcode27/"><span>more</span></a></h3>
-    
-  
-</article>
-
-
-
-
-
-  <article class="article-container ">
-
-  
-    
     <h3 class="article-title"><a href="/2023/02/19/classic/"><span>classic</span></a></h3>
     
   
@@ -523,7 +466,7 @@ inputArea.onkeydown = function(){ if(event.keyCode == 13) return false }
   <script>
     let maxNum = Number.parseInt('10')
     let iconText = '❤'
-    let color = 'red'
+    let color = 'blue'
     new Draw({maxNum, iconText, color})
   </script>
 
