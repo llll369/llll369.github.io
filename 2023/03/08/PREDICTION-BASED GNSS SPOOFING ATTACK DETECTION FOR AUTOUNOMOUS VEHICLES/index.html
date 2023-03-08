@@ -1,0 +1,343 @@
+<!DOCTYPE HTML>
+<html>
+<head >
+  <meta charset="utf-8">
+  
+  <title>Hexo</title>
+
+  
+  <meta name="author" content="John Doe">
+  
+
+  
+  <meta name="description" content="PREDICTION-BASED GNSS SPOOFING ATTACK DETECTION FOR AUTOUNOMOUS VEHICLES
+
+AV：autonomous vehicle 自动驾驶车辆
+PNT：定位、导航与定时服务
+IMU：惯性测量单元
+CAN：controller area n">
+  
+
+  
+  
+  <meta name="keywords" content="">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="Hexo"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+  
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-5005349780815724",
+    enable_page_level_ads: true
+  });
+</script>
+
+  
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?223eea22355699157e147870eb124b24";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+  <link rel="manifest" href="/manifest.json">
+  <link href="/favicon.ico" rel="icon">
+
+  <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    
+
+    <header class="header-container" style="background-image: url('/images/blog-bg.jpg');">
+
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header page-scroll">
+          <button type="button" id="tglBtn" class="navbar-toggle">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">John Doe</a>
+        </div>
+        <div id="bosenyblog-navbar">
+          <div class="navbar-collapse" id="bs-example-navbar-collapse-6">
+            <ul class="nav navbar-nav navbar-right">
+            
+              <li><a href="/">Home</a></li>
+            
+              <li><a href="/archives">Archives</a></li>
+            
+              <li><a href="/about">About</a></li>
+            
+              <li><a href="/tags">Tags</a></li>
+            
+            </ul>
+          </div>
+        </div>
+
+    </div>
+ </nav>
+ <div class="gotop-btn">
+
+ </div>
+</header>
+
+        
+          <div class="container ">
+          <div class="row">
+            <main class="site-main posts-loop col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container" style="position: inherit;">
+            <article class="article-container ">
+
+  
+    
+    <h3 class="article-title"><span></span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2023/03/08/PREDICTION-BASED GNSS SPOOFING ATTACK DETECTION FOR AUTOUNOMOUS VEHICLES/" rel="bookmark">
+        <time class="entry-date published" datetime="2023-03-08T06:31:38.339Z">
+          2023-03-08
+        </time>
+      </a>
+    </span>
+    <br />
+    
+    <span id="busuanzi_container_page_pv">
+      本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+          <h1 id="PREDICTION-BASED-GNSS-SPOOFING-ATTACK-DETECTION-FOR-AUTOUNOMOUS-VEHICLES"><a href="#PREDICTION-BASED-GNSS-SPOOFING-ATTACK-DETECTION-FOR-AUTOUNOMOUS-VEHICLES" class="headerlink" title="PREDICTION-BASED GNSS SPOOFING ATTACK DETECTION FOR AUTOUNOMOUS VEHICLES"></a>PREDICTION-BASED GNSS SPOOFING ATTACK DETECTION FOR AUTOUNOMOUS VEHICLES</h1><hr>
+<blockquote>
+<p>AV：autonomous vehicle 自动驾驶车辆</p>
+<p>PNT：定位、导航与定时服务</p>
+<p>IMU：惯性测量单元</p>
+<p>CAN：controller area network，控制局域网</p>
+</blockquote>
+<hr>
+<h2 id="1、摘要"><a href="#1、摘要" class="headerlink" title="1、摘要"></a>1、摘要</h2><p>全球定位导航技术（GNSS）利用卫星和无线电通信为自动驾驶车辆（AV）提供PNT服务，然而，由于GNSS信号无加密、C&#x2F;A码开放访问、信号强度低的特性，极易遭受欺骗攻击。<br>    这类欺骗攻击难以发现，因为攻击者可以通过模拟GNSS信号向AV提供错误的位置坐标。本文开发了一种基于预测的欺骗攻击检测策略，使用长短期神经网络（LSTM）预测无人车在两个连续位置之间行驶的距离。本文使用comma2k开发数据集。<br>   训练数据集包含AV的控制区域网络（CAN）、GNSS和惯性测量单元（IMU）提取的不同特征（加速度、角速度、速度和两个连续位置之间的距离），文章利用GNSS设备的定位误差、当前位置和下一时刻预测位置的距离误差（即最大绝对误差）建立阈值。   </p>
+<h2 id="2、欺骗攻击分类"><a href="#2、欺骗攻击分类" class="headerlink" title="2、欺骗攻击分类"></a>2、欺骗攻击分类</h2><p>根据攻击的类型，可以分为三类：简易攻击、中间攻击和复杂攻击。简易攻击容易被检测，因为实际的GNSS信号与欺骗信号之间不同步。中间攻击的攻击者通过使用便携式欺骗器，发出与实际卫星时间相同的欺骗信号。而复杂攻击则针对多个传感器，攻击者同时欺骗所有的传感器，实现复杂的欺骗攻击。</p>
+<p>本文针对该问题，开发了一种基于预测的复杂攻击检测方法，即使用LSTM神经网络来预测AV两个连续位置之间的距离。LSTM根据AV传感器当前的数据预测其在两个位置之间的行驶距离，考虑到GNSS设备的定位误差和预测误差（即真实值和预测行驶距离之间的最大绝对误差）来建立误差阈值。</p>
+<h2 id="3、GNSS欺骗攻击步骤"><a href="#3、GNSS欺骗攻击步骤" class="headerlink" title="3、GNSS欺骗攻击步骤"></a>3、GNSS欺骗攻击步骤</h2><ol>
+<li><p>部署发起欺骗攻击的发射器</p>
+</li>
+<li><p>接管无人系统传感器</p>
+</li>
+<li><p>控制无人系统传感器</p>
+</li>
+<li><p>发起攻击</p>
+</li>
+</ol>
+<h2 id="4、目前检测方法的问题与本文提出的异常检测方法"><a href="#4、目前检测方法的问题与本文提出的异常检测方法" class="headerlink" title="4、目前检测方法的问题与本文提出的异常检测方法"></a>4、目前检测方法的问题与本文提出的异常检测方法</h2><p>现有的异常检测方法分为两类：一类是通过密码技术来对卫星信号进行加密，一类是使用多个接收器来验证信号，发现异常。然而，复杂攻击的发起者可以通过同时欺骗所有接收器来发动攻击。因此，有部分研究者考虑利用GPS坐标数据进行异常检测，有人通过比较无人机（UAV）的当前状态估计和实际位置，提出使用支持向量机（SVM）的欺骗检测方法。本文在此基础上，使用LSTM神经网络预测AV两个连续位置之间是否偏离原定值，以此来评估异常。</p>
+<h2 id="5、数据集选择与使用"><a href="#5、数据集选择与使用" class="headerlink" title="5、数据集选择与使用"></a>5、数据集选择与使用</h2><p>选用comma2k19数据集，其中包含了GNSS、IMU和CAN的信息，论文使用了GNSS的经纬度和速度数据，CAN的速度和方向盘角度数据以及IMU的向前、向后、向右的三轴加速度数据。</p>
+<p>如果GNSS受到欺骗攻击，那么可以假定从GNSS获取的数据被伪造，那么AV会被伪造的数据带到错误的目的地。如果可以预测无人系统当前位置和下一时刻位置的距离，那么我们就可以将预测的下一时刻的距离和实际距离进行比较。</p>
+<p>为了开发基于预测的异常检测策略，本文使用了CAN、IMU以及当前的GNSS数据，假设当前GNSS没有被欺骗，文章将CAN、IMU和GNSS三者的数据同时进行训练。其中，GNSS、IMU和CAN的频率分别为10、100、50赫兹，因此使用GNSS时间作为参考时间，并同步其他所有传感器数据，为LSTM准备训练集和测试集</p>
+<h2 id="6、LSTM算法"><a href="#6、LSTM算法" class="headerlink" title="6、LSTM算法"></a>6、LSTM算法</h2><p>使用经纬度消息和Haversine大圆公式计算每一个时间戳与其前一个时间戳之间的距离：</p>
+<p>$$<br>d&#x3D;2rsin^{-1}(\sqrt{sin^2(\dfrac{\phi_1-\phi_2}{2})+cos(\phi_1)cos(\phi_2)sin^2(\dfrac{\psi_2-\psi_1}{2})})（1）<br>$$</p>
+<p>下图展示了comma2k数据集5987次观测的每个时间戳当前位置和下一时刻位置的距离，这些数据将与IMU和CAN一道用于训练LSTM模型</p>
+<h3 id="预测模型开发与测试"><a href="#预测模型开发与测试" class="headerlink" title="预测模型开发与测试"></a><font color=red>预测模型开发与测试</font></h3><p>LSTM通过将时间序列数据的时间依赖关系存储在循环隐藏层中来处理长期依赖关系，每个内存块由三个门组成：输入门、输出门和遗忘门。文中的LSTM使用LSTM模型，使用没有受到攻击的CAN、IMU和GNSS传感器数据，预测每个时间戳的当前位置和下一时刻位置的距离。本文中搭建的LSTM模型由一个输入层、一个包含了50个神经元的循环隐藏层和一个输出层组成。训练LSTM模型的输入数据包括CAN的速度、转向角度数据和IMU的前向角速度数据。输出是每个时间戳的当前位置和下一时刻的位置之间的距离</p>
+<p>在训练模型之前，将所有的特征归一化，然后作为输入输入到LSTM模型中。LSTM模型的超参数，例如神经元数、epoch数、批次大小和学习率对提高预测精度起着至关重要的作用。使用平均绝对误差MAE作为损失函数</p>
+<p>$$<br>MAE&#x3D;\dfrac{1}{N}\sum_{i&#x3D;1}^N|y_p-y_g|(2)<br>$$</p>
+<p>其中，N为总训练样本量，$y_g$为实际的地面距离，$y_p$为预测的距离数据，优化后的超参数如下表所示</p>
+<p>$$<br>\begin{array}{c|clr}<br>\text{Hyperparameters}&amp;\text{Value}\<br>\hline<br>Number  of  neurons &amp; 50  \<br>Number of epochs &amp; 100  \<br>Batch size &amp; 50 \<br>Learning rate &amp; 0.01  \<br>\end{array}<br>$$</p>
+<p>使用测试数据集对训练好的预测模型进行测试，并使用RMSE作为评价指标</p>
+<p>$$<br>RMSE&#x3D;\dfrac{1}{N}\sqrt{\sum_{i&#x3D;1}^N(y_p-y_p)^2}                   (3）<br>$$</p>
+<p>其中，N为总检验样本量，$y_g$为实际的地面距离，$y_p$为预测的距离，根据下图，我们可以将每个时间戳与下个时间戳的预测距离和实际距离做对比，发现拟合很好。</p>
+<h2 id="针对AV系统的GNSS欺骗攻击检测"><a href="#针对AV系统的GNSS欺骗攻击检测" class="headerlink" title="针对AV系统的GNSS欺骗攻击检测"></a>针对AV系统的GNSS欺骗攻击检测</h2><p>本章节介绍了GNSS欺骗攻击评估场景与攻击产生和检测的精度分析</p>
+<h3 id="欺骗攻击场景和攻击如何发起"><a href="#欺骗攻击场景和攻击如何发起" class="headerlink" title="欺骗攻击场景和攻击如何发起"></a>欺骗攻击场景和攻击如何发起</h3><p>对于AV而言，最糟糕的欺骗情况是AV相信欺骗信号，并转向危险位置，本文使用comma2k19数据集创建了欺骗攻击场景。这种攻击下，攻击者操纵GNSS信号，使被攻击车辆感知到它正在从高速公路退出，而实际上它正在沿着实际路线行驶。这会导致攻击者发生错误的转向。</p>
+<h3 id="GNSS攻击检测策略"><a href="#GNSS攻击检测策略" class="headerlink" title="GNSS攻击检测策略"></a>GNSS攻击检测策略</h3><p>通过比较AV的LSTM预测路径和实际的路径，可以检测到欺骗攻击。在任意时刻t，模型将根据当前GNSS、IMU和CAN给出的观测值，观察AV在（t+1）时刻的行驶距离。由于GNSS接收模块的接收频率是固定的，因此每两个时刻间的时间步长也是固定的。同时，本文将CAN、IMU和LSTM的测量误差相加建立误差阈值。在(t+1)时刻，车辆行驶的距离由t和（t+1）时刻的经纬度信息，通过计算公式得出，如果计算的距离大于误差阈值，则判定攻击者发起来GNSS欺骗攻击。</p>
+
+      
+    </div>
+    
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+  
+    
+    
+  
+</article>
+   
+    <div id="toc" class="toc-article ">
+    <div class="toc-title">目录</div>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#PREDICTION-BASED-GNSS-SPOOFING-ATTACK-DETECTION-FOR-AUTOUNOMOUS-VEHICLES"><span class="toc-number">1.</span> <span class="toc-text">PREDICTION-BASED GNSS SPOOFING ATTACK DETECTION FOR AUTOUNOMOUS VEHICLES</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E6%91%98%E8%A6%81"><span class="toc-number">1.1.</span> <span class="toc-text">1、摘要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E6%AC%BA%E9%AA%97%E6%94%BB%E5%87%BB%E5%88%86%E7%B1%BB"><span class="toc-number">1.2.</span> <span class="toc-text">2、欺骗攻击分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81GNSS%E6%AC%BA%E9%AA%97%E6%94%BB%E5%87%BB%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.3.</span> <span class="toc-text">3、GNSS欺骗攻击步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E7%9B%AE%E5%89%8D%E6%A3%80%E6%B5%8B%E6%96%B9%E6%B3%95%E7%9A%84%E9%97%AE%E9%A2%98%E4%B8%8E%E6%9C%AC%E6%96%87%E6%8F%90%E5%87%BA%E7%9A%84%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B%E6%96%B9%E6%B3%95"><span class="toc-number">1.4.</span> <span class="toc-text">4、目前检测方法的问题与本文提出的异常检测方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E6%95%B0%E6%8D%AE%E9%9B%86%E9%80%89%E6%8B%A9%E4%B8%8E%E4%BD%BF%E7%94%A8"><span class="toc-number">1.5.</span> <span class="toc-text">5、数据集选择与使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81LSTM%E7%AE%97%E6%B3%95"><span class="toc-number">1.6.</span> <span class="toc-text">6、LSTM算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B%E5%BC%80%E5%8F%91%E4%B8%8E%E6%B5%8B%E8%AF%95"><span class="toc-number">1.6.1.</span> <span class="toc-text">预测模型开发与测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%92%88%E5%AF%B9AV%E7%B3%BB%E7%BB%9F%E7%9A%84GNSS%E6%AC%BA%E9%AA%97%E6%94%BB%E5%87%BB%E6%A3%80%E6%B5%8B"><span class="toc-number">1.7.</span> <span class="toc-text">针对AV系统的GNSS欺骗攻击检测</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AC%BA%E9%AA%97%E6%94%BB%E5%87%BB%E5%9C%BA%E6%99%AF%E5%92%8C%E6%94%BB%E5%87%BB%E5%A6%82%E4%BD%95%E5%8F%91%E8%B5%B7"><span class="toc-number">1.7.1.</span> <span class="toc-text">欺骗攻击场景和攻击如何发起</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GNSS%E6%94%BB%E5%87%BB%E6%A3%80%E6%B5%8B%E7%AD%96%E7%95%A5"><span class="toc-number">1.7.2.</span> <span class="toc-text">GNSS攻击检测策略</span></a></li></ol></li></ol></li></ol>
+</div>
+
+
+  
+
+	<!-- async load  -->
+	<script>
+			function async(u, c) {
+				var d = document, t = 'script',
+						o = d.createElement(t),
+						s = d.getElementsByTagName(t)[0];
+				o.src = u;
+				if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+				s.parentNode.insertBefore(o, s);
+			}
+	</script>
+	<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+	<script>
+			async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+					anchors.options = {
+						visible: 'hover',
+						placement: 'left',
+						// icon: '#'
+					};
+					anchors.add().remove('.article-title').remove('.subheading').remove('.sidebar-container h5');
+			})
+	</script>
+	<style>
+			/* place left on bigger screen */
+			@media all and (min-width: 800px) {
+					.anchorjs-link{
+							position: absolute;
+							left: -0.75em;
+							font-size: 1.1em;
+							margin-top : -0.1em;
+					}
+			}
+	</style>
+
+
+
+
+<!-- UY BEGIN -->
+	<div id="gitment-container"></div>
+	<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+	<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+	<script src="/js/web-pinyin.js"></script>
+	<script>
+		function toUnicode(s){ 
+			return s.replace(/([\u4E00-\u9FA5]|[\uFE30-\uFFA0])/g,function(){
+			return "\\u" + RegExp["$1"].charCodeAt(0).toString(16);
+			});
+		}
+		var title = ''
+		var GitHub_id = 'Boseny'
+		var client_id = 'f40c67d0359a2646d2b1'
+		var client_secret = '1cbedbd1a1a2e4b42901aee3d7afe1856c1b7e2d'
+		var repo = 'boseny.me'
+		var gitment = new Gitment({
+		// id: '页面 ID', // 可选。默认为 location.href
+		// id:"11" ,
+		id: title,
+		title: title,
+		owner: GitHub_id,//'你的 GitHub ID',
+		repo: repo,//'存储评论的 repo',
+		oauth: {
+			client_id: client_id,//'你的 client ID',
+			client_secret: client_secret,//'你的 client secret',
+		},
+		})
+		gitment.render('gitment-container')
+	</script>
+<!-- UY END -->
+
+
+
+
+            </main>
+          </div>
+        </div>
+       
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/BosenY/Lap" target="_blank">Lap</a>
+    <br/><span id="busuanzi_container_site_uv"> 
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+    </br>
+    
+      
+        &copy; 2023 John Doe
+      
+    
+  </p>
+</footer>
+    
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-92842840-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+
+  </div>
+
+</div>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+  <script src="https://unpkg.com/draw-something/dist/draw.min.js"></script>
+  <script>
+    let maxNum = Number.parseInt('10')
+    let iconText = '❤'
+    let color = 'blue'
+    new Draw({maxNum, iconText, color})
+  </script>
+
+<script src="/js/index.js"></script>
+<script src="/js/search.js"></script>
+
+</body>
+</html>

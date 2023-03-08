@@ -112,6 +112,99 @@ var _hmt = _hmt || [];
 
   
     
+    <h3 class="article-title"><a href="/2023/03/08/PREDICTION-BASED GNSS SPOOFING ATTACK DETECTION FOR AUTOUNOMOUS VEHICLES/"><span></span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2023/03/08/PREDICTION-BASED GNSS SPOOFING ATTACK DETECTION FOR AUTOUNOMOUS VEHICLES/" rel="bookmark">
+        <time class="entry-date published" datetime="2023-03-08T06:31:38.339Z">
+          2023-03-08
+        </time>
+      </a>
+    </span>
+    <br />
+    
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+          <h1 id="PREDICTION-BASED-GNSS-SPOOFING-ATTACK-DETECTION-FOR-AUTOUNOMOUS-VEHICLES"><a href="#PREDICTION-BASED-GNSS-SPOOFING-ATTACK-DETECTION-FOR-AUTOUNOMOUS-VEHICLES" class="headerlink" title="PREDICTION-BASED GNSS SPOOFING ATTACK DETECTION FOR AUTOUNOMOUS VEHICLES"></a>PREDICTION-BASED GNSS SPOOFING ATTACK DETECTION FOR AUTOUNOMOUS VEHICLES</h1><hr>
+<blockquote>
+<p>AV：autonomous vehicle 自动驾驶车辆</p>
+<p>PNT：定位、导航与定时服务</p>
+<p>IMU：惯性测量单元</p>
+<p>CAN：controller area network，控制局域网</p>
+</blockquote>
+<hr>
+<h2 id="1、摘要"><a href="#1、摘要" class="headerlink" title="1、摘要"></a>1、摘要</h2><p>全球定位导航技术（GNSS）利用卫星和无线电通信为自动驾驶车辆（AV）提供PNT服务，然而，由于GNSS信号无加密、C&#x2F;A码开放访问、信号强度低的特性，极易遭受欺骗攻击。<br>    这类欺骗攻击难以发现，因为攻击者可以通过模拟GNSS信号向AV提供错误的位置坐标。本文开发了一种基于预测的欺骗攻击检测策略，使用长短期神经网络（LSTM）预测无人车在两个连续位置之间行驶的距离。本文使用comma2k开发数据集。<br>   训练数据集包含AV的控制区域网络（CAN）、GNSS和惯性测量单元（IMU）提取的不同特征（加速度、角速度、速度和两个连续位置之间的距离），文章利用GNSS设备的定位误差、当前位置和下一时刻预测位置的距离误差（即最大绝对误差）建立阈值。   </p>
+<h2 id="2、欺骗攻击分类"><a href="#2、欺骗攻击分类" class="headerlink" title="2、欺骗攻击分类"></a>2、欺骗攻击分类</h2><p>根据攻击的类型，可以分为三类：简易攻击、中间攻击和复杂攻击。简易攻击容易被检测，因为实际的GNSS信号与欺骗信号之间不同步。中间攻击的攻击者通过使用便携式欺骗器，发出与实际卫星时间相同的欺骗信号。而复杂攻击则针对多个传感器，攻击者同时欺骗所有的传感器，实现复杂的欺骗攻击。</p>
+<p>本文针对该问题，开发了一种基于预测的复杂攻击检测方法，即使用LSTM神经网络来预测AV两个连续位置之间的距离。LSTM根据AV传感器当前的数据预测其在两个位置之间的行驶距离，考虑到GNSS设备的定位误差和预测误差（即真实值和预测行驶距离之间的最大绝对误差）来建立误差阈值。</p>
+<h2 id="3、GNSS欺骗攻击步骤"><a href="#3、GNSS欺骗攻击步骤" class="headerlink" title="3、GNSS欺骗攻击步骤"></a>3、GNSS欺骗攻击步骤</h2><ol>
+<li><p>部署发起欺骗攻击的发射器</p>
+</li>
+<li><p>接管无人系统传感器</p>
+</li>
+<li><p>控制无人系统传感器</p>
+</li>
+<li><p>发起攻击</p>
+</li>
+</ol>
+<h2 id="4、目前检测方法的问题与本文提出的异常检测方法"><a href="#4、目前检测方法的问题与本文提出的异常检测方法" class="headerlink" title="4、目前检测方法的问题与本文提出的异常检测方法"></a>4、目前检测方法的问题与本文提出的异常检测方法</h2><p>现有的异常检测方法分为两类：一类是通过密码技术来对卫星信号进行加密，一类是使用多个接收器来验证信号，发现异常。然而，复杂攻击的发起者可以通过同时欺骗所有接收器来发动攻击。因此，有部分研究者考虑利用GPS坐标数据进行异常检测，有人通过比较无人机（UAV）的当前状态估计和实际位置，提出使用支持向量机（SVM）的欺骗检测方法。本文在此基础上，使用LSTM神经网络预测AV两个连续位置之间是否偏离原定值，以此来评估异常。</p>
+<h2 id="5、数据集选择与使用"><a href="#5、数据集选择与使用" class="headerlink" title="5、数据集选择与使用"></a>5、数据集选择与使用</h2><p>选用comma2k19数据集，其中包含了GNSS、IMU和CAN的信息，论文使用了GNSS的经纬度和速度数据，CAN的速度和方向盘角度数据以及IMU的向前、向后、向右的三轴加速度数据。</p>
+<p>如果GNSS受到欺骗攻击，那么可以假定从GNSS获取的数据被伪造，那么AV会被伪造的数据带到错误的目的地。如果可以预测无人系统当前位置和下一时刻位置的距离，那么我们就可以将预测的下一时刻的距离和实际距离进行比较。</p>
+<p>为了开发基于预测的异常检测策略，本文使用了CAN、IMU以及当前的GNSS数据，假设当前GNSS没有被欺骗，文章将CAN、IMU和GNSS三者的数据同时进行训练。其中，GNSS、IMU和CAN的频率分别为10、100、50赫兹，因此使用GNSS时间作为参考时间，并同步其他所有传感器数据，为LSTM准备训练集和测试集</p>
+<h2 id="6、LSTM算法"><a href="#6、LSTM算法" class="headerlink" title="6、LSTM算法"></a>6、LSTM算法</h2><p>使用经纬度消息和Haversine大圆公式计算每一个时间戳与其前一个时间戳之间的距离：</p>
+<p>$$<br>d&#x3D;2rsin^{-1}(\sqrt{sin^2(\dfrac{\phi_1-\phi_2}{2})+cos(\phi_1)cos(\phi_2)sin^2(\dfrac{\psi_2-\psi_1}{2})})（1）<br>$$</p>
+<p>下图展示了comma2k数据集5987次观测的每个时间戳当前位置和下一时刻位置的距离，这些数据将与IMU和CAN一道用于训练LSTM模型</p>
+<h3 id="预测模型开发与测试"><a href="#预测模型开发与测试" class="headerlink" title="预测模型开发与测试"></a><font color=red>预测模型开发与测试</font></h3><p>LSTM通过将时间序列数据的时间依赖关系存储在循环隐藏层中来处理长期依赖关系，每个内存块由三个门组成：输入门、输出门和遗忘门。文中的LSTM使用LSTM模型，使用没有受到攻击的CAN、IMU和GNSS传感器数据，预测每个时间戳的当前位置和下一时刻位置的距离。本文中搭建的LSTM模型由一个输入层、一个包含了50个神经元的循环隐藏层和一个输出层组成。训练LSTM模型的输入数据包括CAN的速度、转向角度数据和IMU的前向角速度数据。输出是每个时间戳的当前位置和下一时刻的位置之间的距离</p>
+<p>在训练模型之前，将所有的特征归一化，然后作为输入输入到LSTM模型中。LSTM模型的超参数，例如神经元数、epoch数、批次大小和学习率对提高预测精度起着至关重要的作用。使用平均绝对误差MAE作为损失函数</p>
+<p>$$<br>MAE&#x3D;\dfrac{1}{N}\sum_{i&#x3D;1}^N|y_p-y_g|(2)<br>$$</p>
+<p>其中，N为总训练样本量，$y_g$为实际的地面距离，$y_p$为预测的距离数据，优化后的超参数如下表所示</p>
+<p>$$<br>\begin{array}{c|clr}<br>\text{Hyperparameters}&amp;\text{Value}\<br>\hline<br>Number  of  neurons &amp; 50  \<br>Number of epochs &amp; 100  \<br>Batch size &amp; 50 \<br>Learning rate &amp; 0.01  \<br>\end{array}<br>$$</p>
+<p>使用测试数据集对训练好的预测模型进行测试，并使用RMSE作为评价指标</p>
+<p>$$<br>RMSE&#x3D;\dfrac{1}{N}\sqrt{\sum_{i&#x3D;1}^N(y_p-y_p)^2}                   (3）<br>$$</p>
+<p>其中，N为总检验样本量，$y_g$为实际的地面距离，$y_p$为预测的距离，根据下图，我们可以将每个时间戳与下个时间戳的预测距离和实际距离做对比，发现拟合很好。</p>
+<h2 id="针对AV系统的GNSS欺骗攻击检测"><a href="#针对AV系统的GNSS欺骗攻击检测" class="headerlink" title="针对AV系统的GNSS欺骗攻击检测"></a>针对AV系统的GNSS欺骗攻击检测</h2><p>本章节介绍了GNSS欺骗攻击评估场景与攻击产生和检测的精度分析</p>
+<h3 id="欺骗攻击场景和攻击如何发起"><a href="#欺骗攻击场景和攻击如何发起" class="headerlink" title="欺骗攻击场景和攻击如何发起"></a>欺骗攻击场景和攻击如何发起</h3><p>对于AV而言，最糟糕的欺骗情况是AV相信欺骗信号，并转向危险位置，本文使用comma2k19数据集创建了欺骗攻击场景。这种攻击下，攻击者操纵GNSS信号，使被攻击车辆感知到它正在从高速公路退出，而实际上它正在沿着实际路线行驶。这会导致攻击者发生错误的转向。</p>
+<h3 id="GNSS攻击检测策略"><a href="#GNSS攻击检测策略" class="headerlink" title="GNSS攻击检测策略"></a>GNSS攻击检测策略</h3><p>通过比较AV的LSTM预测路径和实际的路径，可以检测到欺骗攻击。在任意时刻t，模型将根据当前GNSS、IMU和CAN给出的观测值，观察AV在（t+1）时刻的行驶距离。由于GNSS接收模块的接收频率是固定的，因此每两个时刻间的时间步长也是固定的。同时，本文将CAN、IMU和LSTM的测量误差相加建立误差阈值。在(t+1)时刻，车辆行驶的距离由t和（t+1）时刻的经纬度信息，通过计算公式得出，如果计算的距离大于误差阈值，则判定攻击者发起来GNSS欺骗攻击。</p>
+
+      
+    </div>
+    
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+  
+    
+    <h3 class="article-read"><a href="/2023/03/08/PREDICTION-BASED GNSS SPOOFING ATTACK DETECTION FOR AUTOUNOMOUS VEHICLES/"><span>more</span></a></h3>
+    
+  
+</article>
+
+
+
+
+
+  <article class="article-container ">
+
+  
+    
     <h3 class="article-title"><a href="/2023/03/06/LSTM详解/"><span></span></a></h3>
     
   
@@ -2502,76 +2595,11 @@ var _hmt = _hmt || [];
 
 
 
-  <article class="article-container ">
-
-  
-    
-    <h3 class="article-title"><a href="/2023/02/19/hello-world/"><span>Hello World</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2023/02/19/hello-world/" rel="bookmark">
-        <time class="entry-date published" datetime="2023-02-19T08:52:01.252Z">
-          2023-02-19
-        </time>
-      </a>
-    </span>
-    <br />
-    
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-    </div>
-    
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-
-    
-
-    </div>
-
-    
-  </div>
-  
-    
-    <h3 class="article-read"><a href="/2023/02/19/hello-world/"><span>more</span></a></h3>
-    
-  
-</article>
-
-
-
-
-
 
 <nav class="pagination">
   
+  
+  <a href="/page/2/" class="pagination-next">Next</a>
   
 </nav>
             </main>
