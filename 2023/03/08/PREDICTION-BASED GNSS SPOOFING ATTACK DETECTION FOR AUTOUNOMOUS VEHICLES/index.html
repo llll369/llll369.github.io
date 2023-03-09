@@ -182,8 +182,11 @@ var _hmt = _hmt || [];
 <p>使用测试数据集对训练好的预测模型进行测试，并使用RMSE作为评价指标</p>
 <p>$$<br>RMSE&#x3D;\dfrac{1}{N}\sqrt{\sum_{i&#x3D;1}^N(y_p-y_p)^2}                   (3）<br>$$</p>
 <p>其中，N为总检验样本量，$y_g$为实际的地面距离，$y_p$为预测的距离，根据下图，我们可以将每个时间戳与下个时间戳的预测距离和实际距离做对比，发现拟合很好。</p>
+<img src="file:///C:/Users/16241/AppData/Roaming/marktext/images/2023-03-09-09-37-27-image.png" title="" alt="" data-align="center">
+
 <h2 id="针对AV系统的GNSS欺骗攻击检测"><a href="#针对AV系统的GNSS欺骗攻击检测" class="headerlink" title="针对AV系统的GNSS欺骗攻击检测"></a>针对AV系统的GNSS欺骗攻击检测</h2><p>本章节介绍了GNSS欺骗攻击评估场景与攻击产生和检测的精度分析</p>
 <h3 id="欺骗攻击场景和攻击如何发起"><a href="#欺骗攻击场景和攻击如何发起" class="headerlink" title="欺骗攻击场景和攻击如何发起"></a>欺骗攻击场景和攻击如何发起</h3><p>对于AV而言，最糟糕的欺骗情况是AV相信欺骗信号，并转向危险位置，本文使用comma2k19数据集创建了欺骗攻击场景。这种攻击下，攻击者操纵GNSS信号，使被攻击车辆感知到它正在从高速公路退出，而实际上它正在沿着实际路线行驶。这会导致攻击者发生错误的转向。</p>
+<p><img src="C:\Users\16241\AppData\Roaming\marktext\images\2023-03-09-09-37-59-image.png"></p>
 <h3 id="GNSS攻击检测策略"><a href="#GNSS攻击检测策略" class="headerlink" title="GNSS攻击检测策略"></a>GNSS攻击检测策略</h3><p>通过比较AV的LSTM预测路径和实际的路径，可以检测到欺骗攻击。在任意时刻t，模型将根据当前GNSS、IMU和CAN给出的观测值，观察AV在（t+1）时刻的行驶距离。由于GNSS接收模块的接收频率是固定的，因此每两个时刻间的时间步长也是固定的。同时，本文将CAN、IMU和LSTM的测量误差相加建立误差阈值。在(t+1)时刻，车辆行驶的距离由t和（t+1）时刻的经纬度信息，通过计算公式得出，如果计算的距离大于误差阈值，则判定攻击者发起来GNSS欺骗攻击。</p>
 
       
