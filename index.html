@@ -112,6 +112,66 @@ var _hmt = _hmt || [];
 
   
     
+    <h3 class="article-title"><a href="/2023/03/12/Two_Step_Trajectory_Spoofing_Algorithm_for_Loosely/"><span></span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2023/03/12/Two_Step_Trajectory_Spoofing_Algorithm_for_Loosely/" rel="bookmark">
+        <time class="entry-date published" datetime="2023-03-12T09:30:02.448Z">
+          2023-03-12
+        </time>
+      </a>
+    </span>
+    <br />
+    
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+          <h1 id="松散耦合GNSS-x2F-IMU和NIS序列检测的两步轨迹欺骗算法"><a href="#松散耦合GNSS-x2F-IMU和NIS序列检测的两步轨迹欺骗算法" class="headerlink" title="松散耦合GNSS&#x2F;IMU和NIS序列检测的两步轨迹欺骗算法"></a>松散耦合GNSS&#x2F;IMU和NIS序列检测的两步轨迹欺骗算法</h1><h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>GPS欺骗攻击具有很强的威胁性和隐蔽性。越来越多的无人系统配备了更强大的GNSS&#x2F;IMU系统，并配备标准化创新平方算法（NIS）来检测误差是否在可接受范围内。因此，在GNSS&#x2F;IMU上发起欺骗攻击比针对单GNSS进行欺骗攻击要更难。然而，这种松散耦合的融合算法并不能很好地防御更为隐蔽的GNSS欺骗攻击。本文设计了一种两步轨迹制导算法，用于快速引导目标进入欺骗轨迹，仿真结果表明，所提出的算法可以在不触发NIS欺骗警告的情况下，引导搭载了松散耦合GNSS&#x2F;IMU的无人系统沿欺骗轨迹运动。该方法证明了松散耦合GNSS&#x2F;IMU模型存在很多的问题，为后续新的异常检测算法提出提供参考。</p>
+<h2 id="GNSS-x2F-IMU系统"><a href="#GNSS-x2F-IMU系统" class="headerlink" title="GNSS&#x2F;IMU系统"></a>GNSS&#x2F;IMU系统</h2><p>在GNSS&#x2F;IMU系统中，IMU不断地使用GNSS测量信息来修正自身的误差，因此缓慢的长期欺骗干扰也可能导致GNSS&#x2F;IMU系统被欺骗。当欺骗位置、速度和时间（PVT）与真实PVT之间的差异很大时，用户可以通过与其他传感器测量值的比较轻松地检测到欺骗。因此，PVT结果需要逐渐偏置，以确保变化在传感器的误差范围之内。</p>
+<p>2016年，理论推导和仿真论证了GNSS欺骗干扰对松耦合定位结果的影响，理论推导和仿真分析证明：1）GPS欺骗干扰对松耦合组合导航定位结果具有有效的干扰作用；2）组合导航当前时刻的偏差同时受到前一时刻偏差和当前时刻GPS欺骗偏差的影响，但并不代表实际情况，即目标被欺骗后会简单地调整其运动轨迹。2017年，Li和Wang提出的轨迹融合策略避免了无人机导航系统的NIS序列检测，假设欺骗设备安装位置跟踪器实时获取无人机的位置信息，且广播GPS欺骗信号的加速度值与无人机的真实加速度相匹配，但没有分析欺骗对GNSS&#x2F;IMU定位结果的影响。</p>
+<h2 id="两步轨迹制导算法"><a href="#两步轨迹制导算法" class="headerlink" title="两步轨迹制导算法"></a>两步轨迹制导算法</h2><p>在欺骗场景中，攻击者根据目标的实时位置和速度设计欺骗轨迹后，向目标广播GNSS欺骗信号。为便于分析，假设目标在其导航系统的引导下，沿固定方向从当前位置移动到下一个预定轨迹上的目标点。如果没有预定轨迹，通常欺骗装置配置位置跟踪器，因此欺骗器可以实时获得目标的位置和速度信息，因此在位置跟踪器获得目标位置和速度信息的很短的时间间隔内，由于时间间隔极短，可以认为目标的运动路径被预测，因此，本文提出的算法仍然可以使用，因为假设目标在其导航系统的引导下从当前位置移动到目标点上，在一个固定方向下预定的轨迹。因此，该算法也具有相当的实际应用价值。在实际应用中，目标移动时一般使用GNSS&#x2F;IMU输出的定位结果作为其真实位置。当目标导航系统确定了其相对于预定轨迹的定位偏移量后，将调整航向使其位置返回到预定轨迹上的某一点。利用目标的这一特征，开发了以下基本欺骗方法。</p>
+<p>如图所示，假设目标的真实位置A是已知的(通过某种检测手段获得)，B点为目标的目标位置，AB线表示原始运动轨迹，C为欺骗轨迹上的一点，D为欺骗器使导航系统显示的输出点，即欺骗点。在欺骗成功的情况下，目标认为自己是按照轨迹DB移动的，但实际上目标是沿着轨迹AC移动的，欺骗成功。</p>
+<p>本文详细描述了所提出的两步弹道制导算法过程。</p>
+
+      
+    </div>
+    
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+  
+    
+    <h3 class="article-read"><a href="/2023/03/12/Two_Step_Trajectory_Spoofing_Algorithm_for_Loosely/"><span>more</span></a></h3>
+    
+  
+</article>
+
+
+
+
+
+  <article class="article-container ">
+
+  
+    
     <h3 class="article-title"><a href="/2023/03/08/PREDICTION-BASED GNSS SPOOFING ATTACK DETECTION FOR AUTOUNOMOUS VEHICLES/"><span></span></a></h3>
     
   
@@ -176,6 +236,9 @@ var _hmt = _hmt || [];
 <h3 id="欺骗攻击场景和攻击如何发起"><a href="#欺骗攻击场景和攻击如何发起" class="headerlink" title="欺骗攻击场景和攻击如何发起"></a>欺骗攻击场景和攻击如何发起</h3><p>对于AV而言，最糟糕的欺骗情况是AV相信欺骗信号，并转向危险位置，本文使用comma2k19数据集创建了欺骗攻击场景。这种攻击下，攻击者操纵GNSS信号，使被攻击车辆感知到它正在从高速公路退出，而实际上它正在沿着实际路线行驶。这会导致攻击者发生错误的转向。</p>
 <p><img src="C:\Users\16241\AppData\Roaming\marktext\images\2023-03-09-09-37-59-image.png"></p>
 <h3 id="GNSS攻击检测策略"><a href="#GNSS攻击检测策略" class="headerlink" title="GNSS攻击检测策略"></a>GNSS攻击检测策略</h3><p>通过比较AV的LSTM预测路径和实际的路径，可以检测到欺骗攻击。在任意时刻t，模型将根据当前GNSS、IMU和CAN给出的观测值，观察AV在（t+1）时刻的行驶距离。由于GNSS接收模块的接收频率是固定的，因此每两个时刻间的时间步长也是固定的。同时，本文将CAN、IMU和LSTM的测量误差相加建立误差阈值。在(t+1)时刻，车辆行驶的距离由t和（t+1）时刻的经纬度信息，通过计算公式得出，如果计算的距离大于误差阈值，则判定攻击者发起来GNSS欺骗攻击。</p>
+<img title="" src="file:///C:/Users/16241/AppData/Roaming/marktext/images/2023-03-10-11-10-59-image.png" alt="" data-align="center">
+
+<p>如上图所示，如果实际距离和预测的距离差值在绿色标定区域内，则认为没有发生GPS欺骗攻击，如果在红色标定区域内，则认为发生了GPS欺骗攻击。</p>
 
       
     </div>
@@ -2534,62 +2597,6 @@ var _hmt = _hmt || [];
   
     
     <h3 class="article-read"><a href="/2023/02/19/classic/"><span>more</span></a></h3>
-    
-  
-</article>
-
-
-
-
-
-  <article class="article-container ">
-
-  
-    
-    <h3 class="article-title"><a href="/2023/02/19/myFirstArticle-md/"><span>myFirstArticle.md</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2023/02/19/myFirstArticle-md/" rel="bookmark">
-        <time class="entry-date published" datetime="2023-02-19T09:43:00.000Z">
-          2023-02-19
-        </time>
-      </a>
-    </span>
-    <br />
-    
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-          <p> hello  hello
- </p>
-
-      
-    </div>
-    
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-
-    
-
-    </div>
-
-    
-  </div>
-  
-    
-    <h3 class="article-read"><a href="/2023/02/19/myFirstArticle-md/"><span>more</span></a></h3>
     
   
 </article>
