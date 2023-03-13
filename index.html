@@ -112,6 +112,110 @@ var _hmt = _hmt || [];
 
   
     
+    <h3 class="article-title"><a href="/2023/03/13/基于最大似然估计的GNSS欺骗检测/"><span></span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2023/03/13/基于最大似然估计的GNSS欺骗检测/" rel="bookmark">
+        <time class="entry-date published" datetime="2023-03-13T01:25:45.073Z">
+          2023-03-13
+        </time>
+      </a>
+    </span>
+    <br />
+    
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+          <h1 id="基于最大似然估计的GNSS欺骗检测"><a href="#基于最大似然估计的GNSS欺骗检测" class="headerlink" title="基于最大似然估计的GNSS欺骗检测"></a>基于最大似然估计的GNSS欺骗检测</h1><blockquote>
+<p>MLE：最大似然估计</p>
+<p>ECA（Establish-Cancellation Approach）：估计-删除法</p>
+</blockquote>
+<h2 id="一、信号模型"><a href="#一、信号模型" class="headerlink" title="一、信号模型"></a>一、信号模型</h2><p>GNSS基带信号表达如下：</p>
+<p>$$<br>x_n&#x3D;\sum_{i&#x3D;1}^Ma_iD_i(nT_s-\tau_i)c_i(nT_s-\tau_i)e^{j(2\pi_inT_s+\theta_i)}+\omega(nT_s),n&#x3D;0,1,…,K-1<br>$$</p>
+<p>其中：</p>
+<ul>
+<li><p>$T_s$：采样周期</p>
+</li>
+<li><p>$M$：卫星数量</p>
+</li>
+<li><p>$K$：采样数量</p>
+</li>
+<li><p>$a_i$：第i个卫星信号的振幅</p>
+</li>
+<li><p>$D_i(t)$：第i个信号在t时刻的导航数据</p>
+</li>
+<li><p>$c_i(t)$：第i个信号在t时刻的伪随机码</p>
+</li>
+<li><p>$\tau_i$：第i个信号的传递延迟</p>
+</li>
+<li><p>$f_i$：第i个信号的多普勒频移</p>
+</li>
+<li><p>$\theta_i$：第i个信号载波相位</p>
+</li>
+<li><p>$\omega(t)$：零均值的附加高斯白噪声（AWGN），方差为$\sigma^2$</p>
+</li>
+</ul>
+<p>选取K个样本作为观测数据，上面的等式可以表达为：</p>
+<p>$$<br>x&#x3D;G(\tau,f)a+\omega<br>$$</p>
+<h2 id="二、基于最大似然法的定位"><a href="#二、基于最大似然法的定位" class="headerlink" title="二、基于最大似然法的定位"></a>二、基于最大似然法的定位</h2><h3 id="2-1最大似然法"><a href="#2-1最大似然法" class="headerlink" title="2.1最大似然法"></a>2.1最大似然法</h3><p>x的概率密度函数为：</p>
+<p>$$<br>p(x;\tau,f,a,\sigma^2)&#x3D;\frac{1}{(2\pi\sigma^2)^{K&#x2F;2}}exp[-\frac{||x-Ga||^2}{2\sigma^2}].<br>$$</p>
+<p>将{$\tau$,$f$}记为r，r是上述概率模型中的未知参数，对它求取最大似然估计。</p>
+<h3 id="2-2位置估计"><a href="#2-2位置估计" class="headerlink" title="2.2位置估计"></a>2.2位置估计</h3><p>$\tau$、$f$可以通过用户的PVT（位置，速度和时间）参数计算：</p>
+<p>$$<br>\tau_i&#x3D;\frac{1}{c}||\mathbf u^{(i)}-\mathbf u||+t_u-t^{(i)}+e^{(i)},\<br>f_i&#x3D;-\frac{f_T}{c}[(v^{(i)}-v)\mathbf l^{(i)}+\dot t_u-\dot t^{(i)}].<br>$$</p>
+<h2 id="三、基于最大似然估计的反欺骗方法"><a href="#三、基于最大似然估计的反欺骗方法" class="headerlink" title="三、基于最大似然估计的反欺骗方法"></a>三、基于最大似然估计的反欺骗方法</h2><h3 id="3-1欺骗信号模型"><a href="#3-1欺骗信号模型" class="headerlink" title="3.1欺骗信号模型"></a>3.1欺骗信号模型</h3><p>当存在欺骗信号时，基带信号可以表示为（角标a表示真实信号，s表示欺骗信号）：</p>
+<p>$$<br>x&#x3D;G(\rho_a)a_a+G(\rho_s)+\omega_f<br>$$</p>
+<p>当欺骗信号与真实信号的位置存在偏差时，代价函数$J$形成多峰分布，如下：</p>
+<p>在上图中，为了便于展示，将坐标的搜索空间限制在二维（$x_u,y_u$）中。其中[$\delta x_u$,$\delta y_u$]&#x3D;[0,0]处表示真实信号对应的峰值，[$\delta x_u,\delta y_u$]&#x3D;[0,600]处表示欺骗信号对应的峰值。</p>
+<p>在上图中，欺骗信号的频率高于真实信号，导致欺骗信号对应的峰值也高于真实信号。因此，在这种情况下，欺骗信号的最大似然估计值大于真实信号，可见<strong>单纯的最大似然估计无法用于欺骗检测</strong></p>
+<h3 id="3-2估计-删除法（Estimation-Cancellation-Approach）"><a href="#3-2估计-删除法（Estimation-Cancellation-Approach）" class="headerlink" title="3.2估计-删除法（Estimation-Cancellation Approach）"></a>3.2估计-删除法（Estimation-Cancellation Approach）</h3><p>将最大似然估计出的参数$\rho$记为$\hat\rho_1$,$\hat\rho_1$对应的信号可以表示为：</p>
+<p>$$<br>\hat x&#x3D; G(\hat\rho_1)\hat a_1&#x3D;G(\hat\rho_1)[G(\hat\rho_1^H)G(\hat\rho_1)]^{-1}G(\hat\rho_1)^Hx<br>$$</p>
+<p>将$\hat x$从原始信号中删去，得到残余信号：</p>
+<p>$$<br>y&#x3D;x-\hat x<br>$$</p>
+<p>当不存在欺骗信号时，残余信号主要包含噪声，当存在欺骗信号时，残余信号还包括一些GNSS信号。可以表示为如下两个假设：</p>
+<p>$$<br>\mathcal H_0:\mathcal y &#x3D; \mathcal \omega \<br>\mathcal H_1:\mathcal y &#x3D; G(\rho_s)a_s+G(\rho_a)a_a-G(\hat\rho_1)\hat a_1+\omega<br>$$</p>
+<p>$H_1$包含三种情况，如下图所示，阴影部分代表$J$函数峰值对应的信号，（a）表示$\hat\rho_1$</p>
+<p>&#x3D;$\rho_s$,（b）表示$\rho_a$&#x3D;$\hat\rho_1$,（c）表示$\hat\rho_1$，$\rho_a$，$\rho_s$各不相同；</p>
+<h3 id="3-3欺骗验证"><a href="#3-3欺骗验证" class="headerlink" title="3.3欺骗验证"></a>3.3欺骗验证</h3><p>从上述过程可以看出，当存在多路径效应（multipath）的信号时，T(y)也可能超过阈值。但多个多路径信号之间很难形成一致性，而欺骗信号则不然。根据这一点，本文设计了一种欺骗验证方法来减少由多路径效应引起的误报</p>
+
+      
+    </div>
+    
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+  
+    
+    <h3 class="article-read"><a href="/2023/03/13/基于最大似然估计的GNSS欺骗检测/"><span>more</span></a></h3>
+    
+  
+</article>
+
+
+
+
+
+  <article class="article-container ">
+
+  
+    
     <h3 class="article-title"><a href="/2023/03/12/Two_Step_Trajectory_Spoofing_Algorithm_for_Loosely/"><span></span></a></h3>
     
   
@@ -2543,60 +2647,6 @@ var _hmt = _hmt || [];
   
     
     <h3 class="article-read"><a href="/2023/02/23/SAID(1)/"><span>more</span></a></h3>
-    
-  
-</article>
-
-
-
-
-
-  <article class="article-container ">
-
-  
-    
-    <h3 class="article-title"><a href="/2023/02/19/classic/"><span>classic</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2023/02/19/classic/" rel="bookmark">
-        <time class="entry-date published" datetime="2023-02-19T11:02:29.000Z">
-          2023-02-19
-        </time>
-      </a>
-    </span>
-    <br />
-    
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-          <h1 id="my-First-Classic"><a href="#my-First-Classic" class="headerlink" title="my First Classic"></a>my First Classic</h1>
-      
-    </div>
-    
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-
-    
-
-    </div>
-
-    
-  </div>
-  
-    
-    <h3 class="article-read"><a href="/2023/02/19/classic/"><span>more</span></a></h3>
     
   
 </article>

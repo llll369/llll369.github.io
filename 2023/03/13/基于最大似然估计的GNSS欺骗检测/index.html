@@ -1,0 +1,354 @@
+<!DOCTYPE HTML>
+<html>
+<head >
+  <meta charset="utf-8">
+  
+  <title>Hexo</title>
+
+  
+  <meta name="author" content="John Doe">
+  
+
+  
+  <meta name="description" content="基于最大似然估计的GNSS欺骗检测
+MLE：最大似然估计
+ECA（Establish-Cancellation Approach）：估计-删除法
+
+一、信号模型GNSS基带信号表达如下：
+$$x_n&amp;#x3D;\sum_{i&amp;#x3D;1}^Ma_iD_i(nT_s-\tau_i)c_i(nT_s-">
+  
+
+  
+  
+  <meta name="keywords" content="">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="Hexo"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+  
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-5005349780815724",
+    enable_page_level_ads: true
+  });
+</script>
+
+  
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?223eea22355699157e147870eb124b24";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+  <link rel="manifest" href="/manifest.json">
+  <link href="/favicon.ico" rel="icon">
+
+  <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    
+
+    <header class="header-container" style="background-image: url('/images/blog-bg.jpg');">
+
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header page-scroll">
+          <button type="button" id="tglBtn" class="navbar-toggle">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">John Doe</a>
+        </div>
+        <div id="bosenyblog-navbar">
+          <div class="navbar-collapse" id="bs-example-navbar-collapse-6">
+            <ul class="nav navbar-nav navbar-right">
+            
+              <li><a href="/">Home</a></li>
+            
+              <li><a href="/archives">Archives</a></li>
+            
+              <li><a href="/about">About</a></li>
+            
+              <li><a href="/tags">Tags</a></li>
+            
+            </ul>
+          </div>
+        </div>
+
+    </div>
+ </nav>
+ <div class="gotop-btn">
+
+ </div>
+</header>
+
+        
+          <div class="container ">
+          <div class="row">
+            <main class="site-main posts-loop col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container" style="position: inherit;">
+            <article class="article-container ">
+
+  
+    
+    <h3 class="article-title"><span></span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2023/03/13/基于最大似然估计的GNSS欺骗检测/" rel="bookmark">
+        <time class="entry-date published" datetime="2023-03-13T01:25:45.073Z">
+          2023-03-13
+        </time>
+      </a>
+    </span>
+    <br />
+    
+    <span id="busuanzi_container_page_pv">
+      本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+          <h1 id="基于最大似然估计的GNSS欺骗检测"><a href="#基于最大似然估计的GNSS欺骗检测" class="headerlink" title="基于最大似然估计的GNSS欺骗检测"></a>基于最大似然估计的GNSS欺骗检测</h1><blockquote>
+<p>MLE：最大似然估计</p>
+<p>ECA（Establish-Cancellation Approach）：估计-删除法</p>
+</blockquote>
+<h2 id="一、信号模型"><a href="#一、信号模型" class="headerlink" title="一、信号模型"></a>一、信号模型</h2><p>GNSS基带信号表达如下：</p>
+<p>$$<br>x_n&#x3D;\sum_{i&#x3D;1}^Ma_iD_i(nT_s-\tau_i)c_i(nT_s-\tau_i)e^{j(2\pi_inT_s+\theta_i)}+\omega(nT_s),n&#x3D;0,1,…,K-1<br>$$</p>
+<p>其中：</p>
+<ul>
+<li><p>$T_s$：采样周期</p>
+</li>
+<li><p>$M$：卫星数量</p>
+</li>
+<li><p>$K$：采样数量</p>
+</li>
+<li><p>$a_i$：第i个卫星信号的振幅</p>
+</li>
+<li><p>$D_i(t)$：第i个信号在t时刻的导航数据</p>
+</li>
+<li><p>$c_i(t)$：第i个信号在t时刻的伪随机码</p>
+</li>
+<li><p>$\tau_i$：第i个信号的传递延迟</p>
+</li>
+<li><p>$f_i$：第i个信号的多普勒频移</p>
+</li>
+<li><p>$\theta_i$：第i个信号载波相位</p>
+</li>
+<li><p>$\omega(t)$：零均值的附加高斯白噪声（AWGN），方差为$\sigma^2$</p>
+</li>
+</ul>
+<p>选取K个样本作为观测数据，上面的等式可以表达为：</p>
+<p>$$<br>x&#x3D;G(\tau,f)a+\omega<br>$$</p>
+<h2 id="二、基于最大似然法的定位"><a href="#二、基于最大似然法的定位" class="headerlink" title="二、基于最大似然法的定位"></a>二、基于最大似然法的定位</h2><h3 id="2-1最大似然法"><a href="#2-1最大似然法" class="headerlink" title="2.1最大似然法"></a>2.1最大似然法</h3><p>x的概率密度函数为：</p>
+<p>$$<br>p(x;\tau,f,a,\sigma^2)&#x3D;\frac{1}{(2\pi\sigma^2)^{K&#x2F;2}}exp[-\frac{||x-Ga||^2}{2\sigma^2}].<br>$$</p>
+<p>将{$\tau$,$f$}记为r，r是上述概率模型中的未知参数，对它求取最大似然估计。</p>
+<h3 id="2-2位置估计"><a href="#2-2位置估计" class="headerlink" title="2.2位置估计"></a>2.2位置估计</h3><p>$\tau$、$f$可以通过用户的PVT（位置，速度和时间）参数计算：</p>
+<p>$$<br>\tau_i&#x3D;\frac{1}{c}||\mathbf u^{(i)}-\mathbf u||+t_u-t^{(i)}+e^{(i)},\<br>f_i&#x3D;-\frac{f_T}{c}[(v^{(i)}-v)\mathbf l^{(i)}+\dot t_u-\dot t^{(i)}].<br>$$</p>
+<h2 id="三、基于最大似然估计的反欺骗方法"><a href="#三、基于最大似然估计的反欺骗方法" class="headerlink" title="三、基于最大似然估计的反欺骗方法"></a>三、基于最大似然估计的反欺骗方法</h2><h3 id="3-1欺骗信号模型"><a href="#3-1欺骗信号模型" class="headerlink" title="3.1欺骗信号模型"></a>3.1欺骗信号模型</h3><p>当存在欺骗信号时，基带信号可以表示为（角标a表示真实信号，s表示欺骗信号）：</p>
+<p>$$<br>x&#x3D;G(\rho_a)a_a+G(\rho_s)+\omega_f<br>$$</p>
+<p>当欺骗信号与真实信号的位置存在偏差时，代价函数$J$形成多峰分布，如下：</p>
+<p>在上图中，为了便于展示，将坐标的搜索空间限制在二维（$x_u,y_u$）中。其中[$\delta x_u$,$\delta y_u$]&#x3D;[0,0]处表示真实信号对应的峰值，[$\delta x_u,\delta y_u$]&#x3D;[0,600]处表示欺骗信号对应的峰值。</p>
+<p>在上图中，欺骗信号的频率高于真实信号，导致欺骗信号对应的峰值也高于真实信号。因此，在这种情况下，欺骗信号的最大似然估计值大于真实信号，可见<strong>单纯的最大似然估计无法用于欺骗检测</strong></p>
+<h3 id="3-2估计-删除法（Estimation-Cancellation-Approach）"><a href="#3-2估计-删除法（Estimation-Cancellation-Approach）" class="headerlink" title="3.2估计-删除法（Estimation-Cancellation Approach）"></a>3.2估计-删除法（Estimation-Cancellation Approach）</h3><p>将最大似然估计出的参数$\rho$记为$\hat\rho_1$,$\hat\rho_1$对应的信号可以表示为：</p>
+<p>$$<br>\hat x&#x3D; G(\hat\rho_1)\hat a_1&#x3D;G(\hat\rho_1)[G(\hat\rho_1^H)G(\hat\rho_1)]^{-1}G(\hat\rho_1)^Hx<br>$$</p>
+<p>将$\hat x$从原始信号中删去，得到残余信号：</p>
+<p>$$<br>y&#x3D;x-\hat x<br>$$</p>
+<p>当不存在欺骗信号时，残余信号主要包含噪声，当存在欺骗信号时，残余信号还包括一些GNSS信号。可以表示为如下两个假设：</p>
+<p>$$<br>\mathcal H_0:\mathcal y &#x3D; \mathcal \omega \<br>\mathcal H_1:\mathcal y &#x3D; G(\rho_s)a_s+G(\rho_a)a_a-G(\hat\rho_1)\hat a_1+\omega<br>$$</p>
+<p>$H_1$包含三种情况，如下图所示，阴影部分代表$J$函数峰值对应的信号，（a）表示$\hat\rho_1$</p>
+<p>&#x3D;$\rho_s$,（b）表示$\rho_a$&#x3D;$\hat\rho_1$,（c）表示$\hat\rho_1$，$\rho_a$，$\rho_s$各不相同；</p>
+<h3 id="3-3欺骗验证"><a href="#3-3欺骗验证" class="headerlink" title="3.3欺骗验证"></a>3.3欺骗验证</h3><p>从上述过程可以看出，当存在多路径效应（multipath）的信号时，T(y)也可能超过阈值。但多个多路径信号之间很难形成一致性，而欺骗信号则不然。根据这一点，本文设计了一种欺骗验证方法来减少由多路径效应引起的误报</p>
+
+      
+    </div>
+    
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+  
+    
+    
+  
+</article>
+   
+    <div id="toc" class="toc-article ">
+    <div class="toc-title">目录</div>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%9C%80%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1%E7%9A%84GNSS%E6%AC%BA%E9%AA%97%E6%A3%80%E6%B5%8B"><span class="toc-number">1.</span> <span class="toc-text">基于最大似然估计的GNSS欺骗检测</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BF%A1%E5%8F%B7%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">一、信号模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%9F%BA%E4%BA%8E%E6%9C%80%E5%A4%A7%E4%BC%BC%E7%84%B6%E6%B3%95%E7%9A%84%E5%AE%9A%E4%BD%8D"><span class="toc-number">1.2.</span> <span class="toc-text">二、基于最大似然法的定位</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1%E6%9C%80%E5%A4%A7%E4%BC%BC%E7%84%B6%E6%B3%95"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1最大似然法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2%E4%BD%8D%E7%BD%AE%E4%BC%B0%E8%AE%A1"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2位置估计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%9F%BA%E4%BA%8E%E6%9C%80%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1%E7%9A%84%E5%8F%8D%E6%AC%BA%E9%AA%97%E6%96%B9%E6%B3%95"><span class="toc-number">1.3.</span> <span class="toc-text">三、基于最大似然估计的反欺骗方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1%E6%AC%BA%E9%AA%97%E4%BF%A1%E5%8F%B7%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.3.1.</span> <span class="toc-text">3.1欺骗信号模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2%E4%BC%B0%E8%AE%A1-%E5%88%A0%E9%99%A4%E6%B3%95%EF%BC%88Estimation-Cancellation-Approach%EF%BC%89"><span class="toc-number">1.3.2.</span> <span class="toc-text">3.2估计-删除法（Estimation-Cancellation Approach）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3%E6%AC%BA%E9%AA%97%E9%AA%8C%E8%AF%81"><span class="toc-number">1.3.3.</span> <span class="toc-text">3.3欺骗验证</span></a></li></ol></li></ol></li></ol>
+</div>
+
+
+  
+
+	<!-- async load  -->
+	<script>
+			function async(u, c) {
+				var d = document, t = 'script',
+						o = d.createElement(t),
+						s = d.getElementsByTagName(t)[0];
+				o.src = u;
+				if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+				s.parentNode.insertBefore(o, s);
+			}
+	</script>
+	<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+	<script>
+			async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+					anchors.options = {
+						visible: 'hover',
+						placement: 'left',
+						// icon: '#'
+					};
+					anchors.add().remove('.article-title').remove('.subheading').remove('.sidebar-container h5');
+			})
+	</script>
+	<style>
+			/* place left on bigger screen */
+			@media all and (min-width: 800px) {
+					.anchorjs-link{
+							position: absolute;
+							left: -0.75em;
+							font-size: 1.1em;
+							margin-top : -0.1em;
+					}
+			}
+	</style>
+
+
+
+
+<!-- UY BEGIN -->
+	<div id="gitment-container"></div>
+	<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+	<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+	<script src="/js/web-pinyin.js"></script>
+	<script>
+		function toUnicode(s){ 
+			return s.replace(/([\u4E00-\u9FA5]|[\uFE30-\uFFA0])/g,function(){
+			return "\\u" + RegExp["$1"].charCodeAt(0).toString(16);
+			});
+		}
+		var title = ''
+		var GitHub_id = 'Boseny'
+		var client_id = 'f40c67d0359a2646d2b1'
+		var client_secret = '1cbedbd1a1a2e4b42901aee3d7afe1856c1b7e2d'
+		var repo = 'boseny.me'
+		var gitment = new Gitment({
+		// id: '页面 ID', // 可选。默认为 location.href
+		// id:"11" ,
+		id: title,
+		title: title,
+		owner: GitHub_id,//'你的 GitHub ID',
+		repo: repo,//'存储评论的 repo',
+		oauth: {
+			client_id: client_id,//'你的 client ID',
+			client_secret: client_secret,//'你的 client secret',
+		},
+		})
+		gitment.render('gitment-container')
+	</script>
+<!-- UY END -->
+
+
+
+
+            </main>
+          </div>
+        </div>
+       
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/BosenY/Lap" target="_blank">Lap</a>
+    <br/><span id="busuanzi_container_site_uv"> 
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+    </br>
+    
+      
+        &copy; 2023 John Doe
+      
+    
+  </p>
+</footer>
+    
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-92842840-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+
+  </div>
+
+</div>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+  <script src="https://unpkg.com/draw-something/dist/draw.min.js"></script>
+  <script>
+    let maxNum = Number.parseInt('10')
+    let iconText = '❤'
+    let color = 'blue'
+    new Draw({maxNum, iconText, color})
+  </script>
+
+<script src="/js/index.js"></script>
+<script src="/js/search.js"></script>
+
+</body>
+</html>
