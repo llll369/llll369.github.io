@@ -1,0 +1,463 @@
+<!DOCTYPE HTML>
+<html>
+<head >
+  <meta charset="utf-8">
+  
+  <title>Hexo</title>
+
+  
+  <meta name="author" content="John Doe">
+  
+
+  
+  <meta name="description" content="RVFuzzer：通过控制引导测试，发现在机器人车辆中的输入验证漏洞
+RV：robotic vehicle，机器人车辆
+
+摘要：机器人车辆（RV）正被应用于各个领域，由于其的广泛应用，RV中的安全问题也开始受到关注。本文研究并解决了RV控制程序中的一类新型漏洞，称为输入验证漏洞，该漏洞涉及对于控制参">
+  
+
+  
+  
+  <meta name="keywords" content="">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="Hexo"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+  
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-5005349780815724",
+    enable_page_level_ads: true
+  });
+</script>
+
+  
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?223eea22355699157e147870eb124b24";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+  <link rel="manifest" href="/manifest.json">
+  <link href="/favicon.ico" rel="icon">
+
+  <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    
+
+    <header class="header-container" style="background-image: url('/images/blog-bg.jpg');">
+
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header page-scroll">
+          <button type="button" id="tglBtn" class="navbar-toggle">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">John Doe</a>
+        </div>
+        <div id="bosenyblog-navbar">
+          <div class="navbar-collapse" id="bs-example-navbar-collapse-6">
+            <ul class="nav navbar-nav navbar-right">
+            
+              <li><a href="/">Home</a></li>
+            
+              <li><a href="/archives">Archives</a></li>
+            
+              <li><a href="/about">About</a></li>
+            
+              <li><a href="/tags">Tags</a></li>
+            
+            </ul>
+          </div>
+        </div>
+
+    </div>
+ </nav>
+ <div class="gotop-btn">
+
+ </div>
+</header>
+
+        
+          <div class="container ">
+          <div class="row">
+            <main class="site-main posts-loop col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container" style="position: inherit;">
+            <article class="article-container ">
+
+  
+    
+    <h3 class="article-title"><span></span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2023/03/13/RvFuzzer/" rel="bookmark">
+        <time class="entry-date published" datetime="2023-03-13T08:13:26.586Z">
+          2023-03-13
+        </time>
+      </a>
+    </span>
+    <br />
+    
+    <span id="busuanzi_container_page_pv">
+      本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+          <h1 id="RVFuzzer：通过控制引导测试，发现在机器人车辆中的输入验证漏洞"><a href="#RVFuzzer：通过控制引导测试，发现在机器人车辆中的输入验证漏洞" class="headerlink" title="RVFuzzer：通过控制引导测试，发现在机器人车辆中的输入验证漏洞"></a>RVFuzzer：通过控制引导测试，发现在机器人车辆中的输入验证漏洞</h1><blockquote>
+<p>RV：robotic vehicle，机器人车辆</p>
+</blockquote>
+<h2 id="摘要："><a href="#摘要：" class="headerlink" title="摘要："></a>摘要：</h2><p>机器人车辆（RV）正被应用于各个领域，由于其的广泛应用，RV中的安全问题也开始受到关注。本文研究并解决了RV控制程序中的一类新型漏洞，称为输入验证漏洞，该漏洞涉及对于控制参数输入缺失或进行不正确的验证检查。这些漏洞可以被用来对RV造成物理破坏，导致任务的失败或RV的损坏。此外，使用这类漏洞的攻击占用的空间非常小，只需要一个看似无害的地面控制命令，不需要代码注入、劫持或欺骗传感器。</p>
+<p>为了防御这种攻击，本文提出了RVFuzzer，这是一个审查系统，使用基于控制-引导的输入突变来发现RV控制程序中的输入验证漏洞。RVFuzzer使用RV控制模型来提高检测的准确性。具体来说，RVFuzzer设计了一个控制不稳定性检测器，通过观察（模拟）基于RV控制模型的物理操作来检测控制程序的错误行为。此外，RVFuzzer通过利用来自控制不稳定性测试器的结果作为反馈，引导生成的输入值更有效地查找输入验证漏洞。</p>
+<h2 id="介绍："><a href="#介绍：" class="headerlink" title="介绍："></a>介绍：</h2><p>RV是一类用于自主运输的网络物理系统。他们通常配备了一个带有控制硬件和软件的计算板。车载控制程序（传感器）持续感知车辆的物理状态并驱动控制终端控制车辆完成给定的任务。随着RV越来越多的应用，RV同样正面临网络和网络-物理层面的攻击。更具体地说，RV的攻击面横跨多个方面，例如：（1）传感器的物理漏洞；（2）控制程序中的消息语义错误；（3）控制程序中传输数据的帧结构问题</p>
+<p>本文主要关注了RV控制程序中的一类控制语义错误，称为输入验证漏洞，输入验证漏洞的产生是因为车载程序对更改控制参数输入的错误或缺失缺乏有效的检查。这样的输入是通过远程控制命令提供给控制程序的，这可能会触发RV的控制器故障，并最终导致车辆在物理层面发生异常。</p>
+<p>另一方面，输入验证漏洞是通过控制不正确设置的参数，在语义上产生的漏洞，在RV中，控制程序可以通过控制参数来进行配置，这些参数是可调的数字输入，确定控制单元的某些功能。可以进一步将输入验证漏洞分为两个子类别：1）控制程序中参数范围检查错误或缺失，会接受不合法的控制参数值设置，称为范围实现漏洞；2）控制参数范围规定不正确，即使正确执行，也可能导致RV控制器故障，将其称为范围规格错误。</p>
+<p>大多数RV都有一个远程控制接口，供操作员在飞行过程中设置或调整控制参数。然而，攻击者同样可以利用这样的接口，利用输入验证漏洞来故意修改一些控制参数。</p>
+<p>使用测试RV程序的方案来检测输入验证漏洞是极具挑战的，目前流行的RV控制软件有相当多的软硬件和控制配置选项，而为了生成精确的控制参数范围，需要对每个RV模型的数百个控制参数进行全面的测试。而随着越来越多的RV模型被提出，这样的测试将会变得难以扩展和进行自动化测试。</p>
+<p><font color=red>本文尝试在没有控制程序源代码的情况下寻找输入验证漏洞的解决方案，主要考虑了以下两点因素：（1）利用输入验证漏洞发起的攻击，其影响可以被RV直观地展现出来；（2）结合RV控制程序和高保真的仿真框架，可以有效地再现该状态。</font></p>
+<p>在此基础上，本文开发了RVFuzzer，用于查找输入验证漏洞。使用基于标准控制稳定性测量地控制不稳定性检测器来检测车辆控制故障。更重要的是，RVFuzzer利用这个检测器来引导输入突变并反馈，来量化控制稳定性，因此可以通过在合理数量地测试运行中覆盖大部分地输入空间，来更有效地发现错误。</p>
+<p>本文的主要贡献如下：</p>
+<ol>
+<li><p>介绍了一种新型漏洞，称为输入验证漏洞，该漏洞可以被攻击者利用来对RV的正常运行造成损害</p>
+</li>
+<li><p>开发了RVFuzzer，一个控制引导程序的审查系统，以高效、安全和自动化的方式发现输入验证错误；</p>
+</li>
+<li><p>将RVFuzzer部署在两个流行的RV系统上进行仿真测试并且 发现了89个输入验证漏洞，其中包括87个瞬时漏洞。</p>
+</li>
+</ol>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>1、RV控制模型：RV控制模型是一般的理论基础，控制RV在任务期间的运动和操作。RV的运动是沿着它的6个自由度，即围绕x、y、z三轴的运动。</p>
+<p>以x轴为例，在x轴控制器内部，有三个基元控制器。分别负责控制RV沿x轴的速度、加速度、位置。每个基元控制器收到两个状态输入：传感器感知到的外部状态$x_x$和上游基元控制器计算出的引用状态$r_x$。该控制器的核心功能是保证RV的控制状态稳定，使观测状态接近于参考状态。函数的输出是其下游的基元控制器的参考状态。同时，每个基元控制器都有多个可调参数，并接受高级任务指令。</p>
+<p>总体而言，RV控制模型涉及到了6个自由度下控制器之间复杂的依赖关系，每个控制器都有多个参数并接受任务指令。此外，控制器、传感器和车辆的物理操作创建了一个反馈回路，使控制器可以周期性地迭代工作。</p>
+<img src="file:///C:/Users/16241/AppData/Roaming/marktext/images/2023-03-14-09-39-12-image.png" title="" alt="" data-align="center">
+
+<p>2、RV控制程序：主要包括以下三个模块：传感器模块、控制器模块和任务模块，分别完成收集传感器输入，根据当前任务、参考状态和传感器输入生成控制输出，解释任务指令并执行的功能。在运动过程中，RV与地面控制站（GCS）通信，地面控制站可能向控制程序发出各种GCS命令。其中许多命令允许RV的操作者可以动态调整控制器和任务参数。</p>
+<p>除了控制和通信功能外，大多数RV控制程序都具有运行时控制状态日志记录功能，用于记录和排除故障。RVFuzzer可以利用这些日志文件来确定控制器的故障情况。</p>
+<p>控制参数</p>
+<p>由于RV控制模型和程序的复杂性、通用性，控制程序中存在大量的可配置参数。例如，在ArduPilot及配置软件中，存在247个可配置的控制参数。这些参数由多个基元控制器共享。当收到GCS命令来调整其中一个参数时，控制程序应该执行可行性检查，来判断新值是否在该参数的安全范围内。不幸的是，这样的检查可能缺失或基于错误的值范围</p>
+<h2 id="攻击模型"><a href="#攻击模型" class="headerlink" title="攻击模型"></a>攻击模型</h2><h3 id="攻击模型与假设"><a href="#攻击模型与假设" class="headerlink" title="攻击模型与假设"></a>攻击模型与假设</h3><p>利用输入验证漏洞进行攻击的攻击方式如下：攻击者已知控制程序中的一个可调节的参数，并且知道该参数缺少检查或者检测算法不正确，攻击者向控制程序中注入一个看似无害的控制命令来更改可配置参数，这一参数由于缺乏安全性检查，会被RV接受并执行，对RV产生错误影响。为了使攻击的危害更大， 攻击者还可以在极端环境下发起攻击，这样会造成更为严重的影响。这一攻击可以从外部发起，也可以从内部发起。</p>
+<h3 id="攻击模型论证"><a href="#攻击模型论证" class="headerlink" title="攻击模型论证"></a>攻击模型论证</h3><p>本文提出的攻击模型是现实的，原因如下：</p>
+<ol>
+<li><p>这样的攻击占用的空间非常小，不需要错误代码注入、木马、内存损坏、传感器欺骗等攻击；</p>
+</li>
+<li><p>由于利用的是目前研究很少的输入验证漏洞，传统的安全加固无法防御这一攻击；</p>
+</li>
+<li><p>由于恶意参数的注入通过了控制程序的有效性检查，这一攻击的隐蔽性极高，其外部表现更像是发生了一次“事故”。</p>
+</li>
+</ol>
+<h2 id="RVFuzzer设计"><a href="#RVFuzzer设计" class="headerlink" title="RVFuzzer设计"></a>RVFuzzer设计</h2><p>设计分为以下两部分阐述：（1）概述RVFuzzer的架构；（2）介绍了两个关键组件的详细设计：控制-引导的不稳定状态检测器，检测车辆的控制状态，以检查控制器的故障；为高效率的程序测试生成控制程序输入的控制-引导输入突变器</p>
+<h3 id="RVFUzzer架构"><a href="#RVFUzzer架构" class="headerlink" title="RVFUzzer架构"></a>RVFUzzer架构</h3><p>RVFuzzer的设计目的在于：（1）在测试过程中检测RV控制模型的物理不稳定性；（2）迭代生成测试输入，来获取具有高效率和覆盖度的测试结果。</p>
+<p>下图展示了RVFuzzer的总体架构，由四个主要元件组成，分别为GCS程序、主体控制程序、仿真器和RVFuzzer核心组件——控制-引导测试仪。其中，GCS软件负责发布RV控制参数更改命令；主题测试程序作为测试目标，模拟控制RV的操作；仿真器对物理车辆及其运行的物理环境进行仿真。</p>
+<p>控制-引导测试仪由两个子模块组成：<strong>控制-引导的不稳定状态检测器和控制-引导输入突变器</strong>。在测试过程中，控制-引导的不稳定状态检测器检测RV的非瞬时的物理干扰（例如碰撞，偏差），可以检测出由输入验证漏洞引起的控制程序执行异常。控制-引导输入突变器是一种反馈驱动地输入变异器，用于有效地变异控制参数和环境因子值。利用控制-引导的不稳定状态检测器结果作为反馈，突变器通过定义良好的RV控制接口（即GCS软件创建和发布的GCS命令）来自适应地变动参数值。</p>
+<img src="file:///C:/Users/16241/AppData/Roaming/marktext/images/2023-03-14-11-09-05-image.png" title="" alt="" data-align="center">
+
+<h3 id="控制-引导不稳定性检测器"><a href="#控制-引导不稳定性检测器" class="headerlink" title="控制-引导不稳定性检测器"></a>控制-引导不稳定性检测器</h3><p>控制-引导的不稳定状态检测器用于持续监测RV控制状态，以确定特定的GCS命令是否已引起非瞬时物理扰动。可以将这类扰动认为是输入验证漏洞的表现。</p>
+<p>由于输入验证漏洞大多数情况下，并不会导致程序崩溃，因此本文设计了一种为输入验证漏洞定制的，监测物理干扰的规则。</p>
+<h4 id="控制状态偏差指示"><a href="#控制状态偏差指示" class="headerlink" title="控制状态偏差指示"></a>控制状态偏差指示</h4><p>利用输入验证漏洞发起的攻击，会导致RV无法稳定其操作状态或完成任务。为了准确地监测漏洞引起的物理干扰，RVFuzzer必须可以准确检查出控制状态偏差。在RV可能遭受的物理干扰中，有两种类型的控制状态偏差：（1）观测状态偏差；（2）参考状态偏差。因此，本文定义了一个控制状态偏差指示规则来确定是否发生了这两种偏差</p>
+<p>第一种类型——观察状态偏差，是控制器未能根据其参考状态（r(t)）确定观测状态（x(t)）。在理论控制模型中，控制器总是尝试让x(t)逼近r(t)。因此，如果x(t)与r(t)之间的差值不断增大以至于超过阈值，则认为观测状态偏移了参考状态。为了量化观测到的状态偏差，利用积分绝对误差来作为控制状态的偏差度量。</p>
+<p>$$<br>deviation(t)&#x3D;\int_t^{t+\omega}\frac{|r(s)-x(s)|}{\omega}ds<br>$$</p>
+<p>设定阈值为$\tau$，并给定时间窗口大小$\omega$，文章规定了在固定时间窗口$\omega$范围内的偏差值$deviation(t)$，如果偏差值大于$\tau$，则认为从$t$开始存在控制状态偏差。</p>
+<p>第二种类型——参考状态偏差，RV偏离了既定任务，控制器需要调整其参考状态来跟踪任务目标。在这一情况下，RVFuzzer将检查参考状态与既定目标之间的距离，如果两者之间的距离超过了设定的阈值，则认为发生了参考状态偏差。</p>
+<p>本文提出的监测规则只监测了非瞬时的控制状态偏差，这是由于非瞬时的控制状态偏差可以使用扩展卡尔曼滤波器来进行过滤。</p>
+<h4 id="控制不稳定性监测"><a href="#控制不稳定性监测" class="headerlink" title="控制不稳定性监测"></a>控制不稳定性监测</h4><p>文章使用了三种状态：参考状态、观测状态和任务状态，两两进行对比，来检测两种控制状态偏差：观测状态偏差和参考状态偏差。在测试任务期间，控制程序很容易记录所有的控制状态数据。注意，控制状态包括每个六自由度上的三个基元控制器（用于速度、位置和加速度控制）；每个基元记录器记录其观测状态、参考状态和任务状态。因此，控制不稳定性检测器可以用于监测任意基元控制器上的控制状态偏差</p>
+<h3 id="控制-引导输入突变器"><a href="#控制-引导输入突变器" class="headerlink" title="控制-引导输入突变器"></a>控制-引导输入突变器</h3><p> 软件测试系统需要有选择地进行程序输入，以实现高错误覆盖率，同时减少主题程序地测试运行次数。换言之，当向程序输入未测试的输入时，生成的测试数据集应该更具有代表性，产生相似的结果。</p>
+<p>变异器的搭建分为两步：首先，本文定义了RVFuzzer的输入变异空间（即动态可调参数的类型和取值范围）。然后描述了控制-引导的输入突变策略，生成有代表性的测试输入，并考虑影响RV操作和控制的环境因素</p>
+<p>本文提出的输入生成方法同时考虑了控制参数和环境因素。对于控制参数，首先定义其值的变异空间，然后提出了反馈驱动的输入突变因子，它生成了一个下降的控制参数变化测试输入集。突变器还会针对外部环境因素进行突变，在输入控制参数值与环境因素值的不同组合下对控制程序进行测试。</p>
+<h4 id="控制参数突变空间"><a href="#控制参数突变空间" class="headerlink" title="控制参数突变空间"></a>控制参数突变空间</h4><p>控制程序的输入变异空间包括：（1）动态可调的控制参数列表；（2）每个参数所有可能值的范围；（3）每个参数的默认值。</p>
+<p>控制参数列表由控制程序规范和GCS命令接口获得。其取值范围可以通过控制参数的数据类型和问询控制程序本身获取。这里解释一下问询控制程序本身获取取值范围的过程。首先向控制程序发送一个参数更改命令，赋予这个参数一个很大&#x2F;很小的值，然后查询该控制程序实际给予这个参数的值，将这个值作为实际情况下该参数的最大&#x2F;最小值。</p>
+<p>突变器还在每个控制参数的范围内选择一个默认值，将其用于突变时在输入空间进行搜索。默认值通常由RV供应商提供，作为RV用户在调优参数时的指导。</p>
+<h4 id="反馈-驱动参数输入突变器"><a href="#反馈-驱动参数输入突变器" class="headerlink" title="反馈-驱动参数输入突变器"></a>反馈-驱动参数输入突变器</h4><p>RVFuzzer的输入突变器接受两种输入：控制参数突变空间和来自控制程序前一次运行的控制不稳定性检测器的结果。突变器的输出是程序下次运行的测试输入。控制程序审查效率取决于如何通过突变器来触发输入验证漏洞。为了解释本文提出的突变策略和方法，本文首先介绍了策略的基本方法，然后描述了反馈驱动测试过程，分为一维突变和多维突变。</p>
+<p>输入空间压缩策略：本文使用数值范围跳跃的思想来有选择地跳过一些参数范围，以提高测试效率。这一方法在本文中是可行的，因为其本质是选择一个阈值，如果取值高于&#x2F;低于该阈值，会造成控制地不稳定，而在此基础上增加&#x2F;降低取值只会加剧其不稳定性。</p>
+<p>基于这一观察，本文提出了突变因子的两个特征：（1）它将报告有效&#x2F;无效的值范围，而不是单个值。这样的范围将提供一个上限和一个下限；（2）根据控制不稳定性检测器的反馈驱动突变器，以确定下一个测试输入。</p>
+<p>一维突变：只对一个参数进行突变检测，在开始前，RVFuzzer先将所有其他参数的值设置为默认值来隔离其他参数对目标参数状态偏差的影响。然后，RVFuzzer的输入突变器独立地确定每个参数的有效&#x2F;无效范围。</p>
+<img src="file:///C:/Users/16241/AppData/Roaming/marktext/images/2023-03-14-16-51-18-image.png" title="" alt="" data-align="center">
+
+<blockquote>
+<p>输入：</p>
+<p>M：任务；</p>
+<p>P：参数；</p>
+<p>E：测试环境因素</p>
+<p>$\tau$：为所有基元控制器提供的控制状态偏置门槛；</p>
+<p>输出：</p>
+<p>R：针对目标参数的无效范围</p>
+</blockquote>
+<p>算法1给出了一维突变过程，对于每一个控制参数，突变器利用基于突变的二分搜索方法来确定有效值范围的上界和下界。</p>
+<p>以上界为例，突变器迭代进行测试运行，使用二进制搜索方法设置下一次运行的输入值并更新工作范围，将工作范围的min-limit设置为目标参数的默认值，将工作范围的max-limit设置为最大可能值；初始输入值为最大极限值和最小极限值之间的中点。在每一次运行中，突变因子获取控制不稳定性监测器在当前值下的输出，并根据检测器的输出考虑以下两种情况，并在下一次迭代中更新工作范围：</p>
+<p>case1：如果突变器观察到当前输入值没有引起任何偏差，它将在下一次运行中跳过工作范围的下半部分，并将新的min-limit作为当前输入值。对于下一次运行，突变器再次将新的输入值作为min-limit和max-limit之间的中间点。</p>
+<p>case2：如果当前的输入值导致控制状态偏离，突变因子得出结论，有其他值低于当前值时，同样会导致偏离。因此，在下一次运动中，突变器将跳过工作范围的上半部分，将max-limit设置为当前的输入值，将新的输入值设置为max-limit和min-limit的中间点。</p>
+<p>由此可见，在每次迭代后，突变器都会排除掉一半的值，这能保证突变器快速过滤掉无关的参数，提高效率。在确定下一个工作范围后，突变器将下一个运行的输入值设置为新工作范围的中点，反馈驱动搜索算法，直到和下一次运行的输入值之间的差异小于预先确定的阈值。最后，突变器确定目标控制参数的有效值范围和对应的脆弱值范围。</p>
+<p>多维突变：在一维突变的基础上，RVFuzzer可以执行一类更高级的突变：多维突变，它可以找到一维突变可能找不到的额外无效参数值范围。引入多维突变的原因是，有些参数之间会相互影响，可能需要学习的目标控制参数依赖于其他的参数。换言之，其他参数的范围可能会扩大目标参数的无效范围。</p>
+<img src="file:///C:/Users/16241/AppData/Roaming/marktext/images/2023-03-14-20-09-54-image.png" title="" alt="" data-align="center">
+
+<blockquote>
+<p>输入：</p>
+<p>M：任务；</p>
+<p>$P_{target}$：目标参数；</p>
+<p>$PS_{all}$：所有输入参数的集合，包括一维搜索结果</p>
+<p>E：测试环境因素</p>
+<p>$\tau$：为所有基元控制器提供的控制状态偏置门槛；</p>
+<p>输出：</p>
+<p>R：针对目标参数的无效范围</p>
+</blockquote>
+<p>为了测试其他参数对目标参数的影响，RVFuzzer针对目标参数（$P_{target}$）执行多维突变，如算法2所示，RVFuzzer使用通过一维突变获取的目标参数有效值范围（2），然后递归地对其他参数（8-15）和目标参数（18-21）进行突变，来获取新的有效值范围。</p>
+<p>在每次递归中，其他每个参数的值只在三个值之间发生变化：默认值，有效值范围的上界和下界（11）。在确定好其他参数的值后，突变器执行与一维突变相似的过程，使用基于突变的二分搜索算法来实时确定与更新目标参数有效值的上界和下界（20-21）。</p>
+<p>多维突变从本质上讲就是将其他参数对目标参数的影响加入讨论，这样，在其他参数的特定值设置下，RVFuzzer可以识别出目标参数中会导致控制状态偏移的附加值。即在一维突变中没有被检测出的无效值范围，被多维突变所扩大了，因此，多维突变可以看作是对多个控制参数值的不完全约束。</p>
+<h4 id="环境因素"><a href="#环境因素" class="headerlink" title="环境因素"></a>环境因素</h4><p>在现实环境中，RV与环境相互作用，包括物理障碍或者风这类外部元素。这些因素会影响RV的控制状态和性能。注意到，外部环境可能会导致原本有效的参数值产生控制状态偏差，而攻击者可以利用这一问题发起攻击。为了检测这种影响，RVFuzzer根据参数值的多维突变进行突变，并模拟环境因素的影响。文章把环境因素分为两类：地理因素和干扰因素。</p>
+<p>本文主要研究的典型地理要素是RV在执行任务期间遇到的障碍，RV需要采取行动避开这样的障碍，这就需要改变参数值来改变轨迹。这可能会扩大参数的无效范围，使得控制状态偏移。为了发现这类输入验证漏洞，RVFuzzer定义并模拟了RV任务，在这些任务中，RVFuzzer需要通过突然的、急剧的轨迹变化来避开障碍。</p>
+<p>外部干扰要素，比如风和湍流也会影响RV的运行。RVFuzzer模拟了阵风，并根据真实的风条件改变风速和方向。</p>
+<h2 id="实验设置"><a href="#实验设置" class="headerlink" title="实验设置"></a>实验设置</h2><p>RVFuzzer的原型实现如下：</p>
+<h4 id="使用的控制程序"><a href="#使用的控制程序" class="headerlink" title="使用的控制程序"></a>使用的控制程序</h4><p>选择四轴飞行器作为主要使用的飞行器。但需要注意的是，RVFuzzer可以在大多数的无人系统上使用，只需要重新配置参数。</p>
+<p>审查实验在一台使用ubuntu64位的台式机上运行，审查两个支持四轴飞行器的控制程序：ArduPilot3.5和PX4 1.8。这两个程序默认的RV控制模型是3DR IRIS+四轴飞行器。</p>
+<h4 id="仿真"><a href="#仿真" class="headerlink" title="仿真"></a>仿真</h4><p>为了模拟物理车辆和环境，文章分别使用APM模拟器和Gazebo用于ArduPilot和PX4。RVFuzzer的控制不稳定性检测和输入突变功能可以很容易地通过模拟器之间进行相互操作。</p>
+<h4 id="GCS程序"><a href="#GCS程序" class="headerlink" title="GCS程序"></a>GCS程序</h4><p>使用QGroundControl和MAVProxy分别来作为PX4和ArduPilot的地面控制站软件</p>
+<h4 id="控制-引导检测器"><a href="#控制-引导检测器" class="headerlink" title="控制-引导检测器"></a>控制-引导检测器</h4><p>控制-引导测试器是RVFuzzer的核心部件，使用python2.7.6编写。文章利用了<font color=red>Pymavlink</font>库，通过使用MAVLink通信协议来远程控制RV的api。</p>
+<p>为了分类和生成漏洞发现结果，本文利用ArduPilot和PX4提供的动态可调参数列表，这样的列表在源代码中以可拓展语言形式（XML）提供，易于解析。</p>
+<h2 id="实验评估"><a href="#实验评估" class="headerlink" title="实验评估"></a>实验评估</h2><p>通过实验，需要对三个问题进行评估：</p>
+<ol>
+<li><p>RVFuzzer在查找输入验证漏洞方面的效果？</p>
+</li>
+<li><p>RVFuzzer的不同输入突变方案如何有助于发现输入验证漏洞？</p>
+</li>
+<li><p>RVFuzzer如何应用于发现可能被用于发起隐匿攻击的输入验证漏洞？</p>
+</li>
+</ol>
+<h4 id="发现输入验证漏洞"><a href="#发现输入验证漏洞" class="headerlink" title="发现输入验证漏洞"></a>发现输入验证漏洞</h4><p>文章总结了RVFuzzer从ArduPilot和PX4发现的输入验证漏洞。</p>
+<h5 id="输入验证漏洞的分类"><a href="#输入验证漏洞的分类" class="headerlink" title="输入验证漏洞的分类"></a>输入验证漏洞的分类</h5><p>本文使用的主要控制程序（ArduPilot和PX4）都在其开发者社区发布了所有控制参数的指定范围，利用这些范围，RVFuzzer使用上文提出的算法，发现了很多输入验证漏洞，主要分为两类：范围实现漏洞和范围规范漏洞。</p>
+<p>范围实现漏洞：如果程序指定的参数有效范围是正确的，那么超过该范围的参数都应该被控制单元拒绝，然而，如果控制程序没有做到这一点。攻击者就可以提供一个超出正常范围的参数并使它被程序接受，从而造成控制状态偏移。这一问题的发生是由于控制程序内部对错误参数没有很好的检测和纠错机制。RVFuzzer使用一维突变，获取目标参数的正常范围，并使用控制不稳定检测器进行漏洞报告，来检测范围实现漏洞。</p>
+<p>范围规范漏洞：与多维突变提出原因相似，开发人员没有考虑到多个参数对于目标参数的影响，这可能导致在有效值范围内出现危险值。这一原因主要有三个因素：硬件型号和配置之间的差异，控制参数之间的相互依赖关系，环境因素的影响。</p>
+<h5 id="输入验证漏洞检测"><a href="#输入验证漏洞检测" class="headerlink" title="输入验证漏洞检测"></a>输入验证漏洞检测</h5><p>下表总结了RVFuzzer在ArduPilot和PX4中发现的范围实现漏洞（RIB）和范围规范漏洞（RSB）共计89个，而受到影响的参数共计63个。</p>
+<img src="file:///C:/Users/16241/AppData/Roaming/marktext/images/2023-03-16-11-34-47-image.png" title="" alt="" data-align="center">
+
+<h5 id="输入验证漏洞的影响"><a href="#输入验证漏洞的影响" class="headerlink" title="输入验证漏洞的影响"></a>输入验证漏洞的影响</h5><p>考虑RV错误物理状态的几个表现：碰撞、轨迹偏移、不稳定运动和冻结控制状态。RVFuzzer通过分析控制程序对不同模块的影响来总结结果</p>
+<p>控制器模块：在与控制器模块相关的参数中，RVFuzzer在ArduPilot中发现了27个范围实现漏洞和1个范围规范漏洞，在PX4中发现了20个范围实现漏洞和19个范围规范漏洞。这些漏洞可以被用于恶意设置无效的参数值或者环境因素，直接影响原始控制器。例如，攻击者可以破坏z轴上管理加速度的参数，使得z轴加速度控制器试图接近被破坏的状态，这就会导致车辆的不稳定。</p>
+<p>传感器模块：RVFuzzer在ArduPilot中发现了3个范围实现漏洞和3个范围规范漏洞。值得注意的是，传感器模块中容易受到改变的控制参数都与传感器校准器或传感器噪声&#x2F;扰动滤波器有关。当校准器补偿传感器的制造误差并相应地调整，滤波器平滑传感器值并帮助控制器对<font color=red>物理交互做出鲁棒响应</font>，因此，如果由于输入验证漏洞而将无效值分配给传感器校验器&#x2F;滤波器相关的目标参数，则观测器会获取错误的观察状态。</p>
+<p>任务模块：RVFuzzer在ArduPilot中发现了6个范围实现漏洞和2个范围规范漏洞，在PX4中发现了7个范围实现漏洞和1个范围规范漏洞。任务模块负责定义或调整车辆任务的任务参数（例如x,y,z轴的速度，俯仰角等），而当任务模块的参数遭到修改时，会导致RV无法完成任务或受损。</p>
+<h4 id="输入突变的有效性"><a href="#输入突变的有效性" class="headerlink" title="输入突变的有效性"></a>输入突变的有效性</h4><p>RVFuzzer采用控制-引导的输入突变策略生成输入ECU的控制参数并设置环境因素。下面将评估这类生成的突变值的有效性</p>
+<h5 id="控制参数突变"><a href="#控制参数突变" class="headerlink" title="控制参数突变"></a>控制参数突变</h5><p>RVFuzzer使用一维突变策略发现范围实现漏洞，该策略用于检测控制单元对范围的错误检测与纠错。而为了检测不正确的范围规范漏洞，RVFuzzer将一维突变和多维突变相结合，下图展示了在使用一维突变和多维突变的策略后，受影响参数的有效值和无效值范围。</p>
+<img src="file:///C:/Users/16241/AppData/Roaming/marktext/images/2023-03-16-17-29-22-image.png" title="" alt="" data-align="center">
+
+<p><font color = red>一维突变</font>：RVFuzzer通过一维突变发现了26个范围规范漏洞：ArduPilot有6个，PX4有20个。例如，PX4中参数MC_TPA_RATE_P，指定的范围在0-1之间，默认值为0。然而，RVFuzzer检查到的控制状态偏差值在0.1-1之间，因此发现指定范围内90%的值都属于无效范围。</p>
+<p><font color=red>多维突变</font>：多维突变进一步扩大了目标参数的无效范围，来包括单个目标参数有效时，与其相关的其他参数会对目标参数的变化产生的影响。在上图中，PX4的MC_PITCHRATE_MAX和MC_ROLLRATE_MAX参数的无效范围分别从0.4%增加到88.1%，从0.1%增加到87.9%，这些结果表明，多维突变策略可以发现控制参数的无效值，并具有更强的参数之间的依赖关系。</p>
+<h4 id="环境因素造成的突变"><a href="#环境因素造成的突变" class="headerlink" title="环境因素造成的突变"></a>环境因素造成的突变</h4><p>本文发现，在考虑环境因素时，有些参数的无效范围会扩大。根据观察， 有两个环境要素会扩大无效范围：（1）地理因素；（2）外部扰动</p>
+<p>文章根据现有的风分析统计数据进行了测试，并模拟了各种风力条件。风力条件分为无风、中风（水平风分量为5m &#x2F;s或垂直风分量为1m &#x2F;s）和强风（水平风分量为10m &#x2F;s或垂直风分量为3m &#x2F;s） 3类。对于每种风况，模拟的阵风从0度到360度，增量为30度。还进行了模拟，在水平测试和垂直测试之间，阵风被设计成每30度角，这样测试的风矢量大约形成一个椭球。该任务已经反映了地理因素，因为它模拟了带有急转弯的飞行路径以避开障碍物。</p>
+<img src="file:///C:/Users/16241/AppData/Roaming/marktext/images/2023-03-16-21-20-34-image.png" title="" alt="" data-align="center">
+
+<p>如上图所示，本文展示了4个参数在不同风力条件下无效范围的变化，可以发现风力变大时，四个参数的无效范围都扩大了。这也意味着攻击者可以利用强风这一外界环境要素来发起攻击。</p>
+<p>这样的输入验证漏洞是可以利用的，因为发起攻击时，RV需要大的角度变化来改变方向。换言之，如果最大允许角度或角速度不够大（即使在规定的值范围内），RV的电机无法产生足够的力来改变方向或抵抗强风。</p>
+<p>同时，本文注意到环境因素突变的结果可能受到其他因素的影响，如控制模型、RV配置和物理属性（电机功率和车辆尺寸）。例如，如果RV能够以更大的滚转角度转弯，具有更小的尺寸，或具有更强的发动机，那么在改变方向时，它可能能够抵抗强风。因此，RVFUZZER需要针对每种特定类型的RV测试这些条件。</p>
+<h3 id="具体实例"><a href="#具体实例" class="headerlink" title="具体实例"></a>具体实例</h3><p>本文提出了三个有代表性的输入验证漏洞错误案例研究，并讨论了攻击者如何利用他们发起攻击与RVFuzzer如何发现他们。</p>
+<p>三种情况涉及了三种不同的控制器，需要RVFuzzer测试技术的不同组件来检测。</p>
+<h5 id="case1：由一维突变发现的导致“不可恢复的RV减速”漏洞"><a href="#case1：由一维突变发现的导致“不可恢复的RV减速”漏洞" class="headerlink" title="case1：由一维突变发现的导致“不可恢复的RV减速”漏洞"></a>case1：由一维突变发现的导致“不可恢复的RV减速”漏洞</h5><img src="file:///C:/Users/16241/AppData/Roaming/marktext/images/2023-03-16-23-39-16-image.png" title="" alt="" data-align="center">
+
+<p>攻击：假设一辆RV被分配了快递包裹的任务，驾驶者将RV速度设置为10m&#x2F;s，初始点在waypoint 1处。在执行任务期间，当RV在point 2处转弯时，攻击者向R发送了一个看似无辜但恶意的消息，将其速度改为了0.2m&#x2F;s，然而，在通过弯道后，驾驶员无法再将速度回调至10m&#x2F;s。这种攻击利用了ArduPilot的输入验证漏洞。</p>
+<p>原因：如下图所示，代码演示了RV在执行任务期间接收到新的速度变化输入（speed_cms表示），指定的最小速度由WPNAV_WP_SPEED_MIN参数表示。第五行表示将输入的新速度与最小速度做对比，这意味着当输入的新值大于&#x2F;等于最小速度时，可以用输入命令的新速度来替代旧速度。而当目前的速度小于最小速度时，将无法更改任务。攻击者可以利用这一特性，向RV中注入低于最小速度的参数，导致无法再改变速度。工作人员通过定义新的最小速度和设置最小速度和输入速度的比较修补了这一漏洞。</p>
+<img src="file:///C:/Users/16241/AppData/Roaming/marktext/images/2023-03-17-10-03-01-image.png" title="" alt="" data-align="center">
+
+<p>漏洞发现：RVFuzzer在执行输入任务速度参数的一维突变时发现了这个错误，对于超过1m&#x2F;s的输入任务值，RV成功地改变了当前任务速度。然而，当速度小于1m&#x2F;s时，RVFuzzer就不能通过设置输入任务参数来改变当前任务速度，导致控制状态偏离。因此，RVFuzzer将这个偏差参数定义为输入验证漏洞。</p>
+<h5 id="case2：多维突变发现导致“路径震荡和奔溃”的漏洞"><a href="#case2：多维突变发现导致“路径震荡和奔溃”的漏洞" class="headerlink" title="case2：多维突变发现导致“路径震荡和奔溃”的漏洞"></a>case2：多维突变发现导致“路径震荡和奔溃”的漏洞</h5><img src="file:///C:/Users/16241/AppData/Roaming/marktext/images/2023-03-17-10-22-49-image.png" title="" alt="" data-align="center">
+
+<p>攻击：RV执行与case1中相同的任务，如上图所示，在任务的waypoint 2，攻击者向RV发送恶意消息，更改了四个与俯仰角相关参数中的一个：MC_PITCH_P、MC_PITCHRATE_P、MC_PITCHRATE_MAX、MC_PITCHRATE_FF，由于这四个参数间的相互依赖关系，恶意消息会导致RV无法稳定其俯仰角，导致不可恢复的震荡和偏离路线。</p>
+<p>原因：这一现象产生的原因是其俯仰角控制器无法跟踪RV俯仰角的参考状态。俯仰角控制器利用四个相互依赖的参数：俯仰角增益参数（MC_PITCH_P），俯仰角速度增益控制参数（MC_PITCHRATE_P），最大俯仰速率（MC_PITCHRATE_MAX），前馈俯仰率（MC_PITCHRATE_FF）。例如，当MC_PITCH_P为低值时，MC_PITCHRATE_FF的高值有助于跟踪俯仰角的参考状态。然而，如果MC_PITCH_P和MC_PITCHRATE_FF都很高，RV就会倾向于执行过于激进的稳定操作。这会导致RV控制状态的不稳定。</p>
+<p>可以发现，如果俯仰角的MC_PITCH_P，MC_PITCHRATE_MAX，MC_PITCHRATE_FF都设定的很高，那么俯仰角控制器将会以极高的灵敏度响应俯仰角参考状态和观测状态之间的微小差异。这样RV将无法严格遵循其飞行路线。</p>
+<p>漏洞检测：RVFuzzer利用多维突变来重新定义俯仰角参数的无效范围。RVFuzzer改变了目标参数（MC_PITCHRATE_MAX），并给予与其相关的两个参数（MC_PITCHRATE_FF、MC_PITCH_P）一个较高的值。通过实验，RVFuzzer发现MC_PITCHRATE_MAX的有效范围从6.7-1800降低到了6.7-220.1。</p>
+<h5 id="case3：风力突变导致“风流路线”的漏洞"><a href="#case3：风力突变导致“风流路线”的漏洞" class="headerlink" title="case3：风力突变导致“风流路线”的漏洞"></a>case3：风力突变导致“风流路线”的漏洞</h5><img src="file:///C:/Users/16241/AppData/Roaming/marktext/images/2023-03-17-11-16-27-image.png" title="" alt="" data-align="center">
+
+<p>攻击：考虑RV被分配了一个任务，通过上图所示路径将包裹交递给客户。考虑风力因素， RV需要远离高层建筑，如果RV的姿态急剧变化，会导致包裹变得不再安全，操作员试图通过限制最大角度变化速度（MC_PITCHRATE_MAX）的一个小值来防止倾斜角度的突然变化。在waypoint 2处，攻击者发送命令，将最大倾斜角（MPC_TILTMAX_AIR）设置为较低的值。由于风力因素，本来应在waypoint 3处转弯120°的RV没有旋转足够角度，导致在多次尝试纠正偏离路径后仍然无法到达目的地。</p>
+<p>原因：导致RV意外偏离飞行轨迹的原因有三种：（1）任务路线急转弯；（2）翻滚控制器的参数值响应改变方向不够及时；（3）强风扩大了翻滚控制器参数的无效范围</p>
+<p>漏洞检测：RVFuzzer在PX4中发现了这一漏洞，该任务涉及RV的许多急转弯情况。由于在强风条件下，翻滚控制器参数的输入值发生突变，RVFuzzer检测到参考状态与任务之间的控制状态偏差。</p>
+<h2 id="相关工作"><a href="#相关工作" class="headerlink" title="相关工作"></a>相关工作</h2><h3 id="控制语义驱动的RV保护"><a href="#控制语义驱动的RV保护" class="headerlink" title="控制语义驱动的RV保护"></a>控制语义驱动的RV保护</h3><p>有大量的语义</p>
+
+      
+    </div>
+    
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+  
+    
+    
+  
+</article>
+   
+    <div id="toc" class="toc-article ">
+    <div class="toc-title">目录</div>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#RVFuzzer%EF%BC%9A%E9%80%9A%E8%BF%87%E6%8E%A7%E5%88%B6%E5%BC%95%E5%AF%BC%E6%B5%8B%E8%AF%95%EF%BC%8C%E5%8F%91%E7%8E%B0%E5%9C%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E8%BD%A6%E8%BE%86%E4%B8%AD%E7%9A%84%E8%BE%93%E5%85%A5%E9%AA%8C%E8%AF%81%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text">RVFuzzer：通过控制引导测试，发现在机器人车辆中的输入验证漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%91%98%E8%A6%81%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">摘要：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D%EF%BC%9A"><span class="toc-number">1.2.</span> <span class="toc-text">介绍：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.3.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.4.</span> <span class="toc-text">攻击模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%A8%A1%E5%9E%8B%E4%B8%8E%E5%81%87%E8%AE%BE"><span class="toc-number">1.4.1.</span> <span class="toc-text">攻击模型与假设</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%A8%A1%E5%9E%8B%E8%AE%BA%E8%AF%81"><span class="toc-number">1.4.2.</span> <span class="toc-text">攻击模型论证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RVFuzzer%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.5.</span> <span class="toc-text">RVFuzzer设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RVFUzzer%E6%9E%B6%E6%9E%84"><span class="toc-number">1.5.1.</span> <span class="toc-text">RVFUzzer架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6-%E5%BC%95%E5%AF%BC%E4%B8%8D%E7%A8%B3%E5%AE%9A%E6%80%A7%E6%A3%80%E6%B5%8B%E5%99%A8"><span class="toc-number">1.5.2.</span> <span class="toc-text">控制-引导不稳定性检测器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E7%8A%B6%E6%80%81%E5%81%8F%E5%B7%AE%E6%8C%87%E7%A4%BA"><span class="toc-number">1.5.2.1.</span> <span class="toc-text">控制状态偏差指示</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E4%B8%8D%E7%A8%B3%E5%AE%9A%E6%80%A7%E7%9B%91%E6%B5%8B"><span class="toc-number">1.5.2.2.</span> <span class="toc-text">控制不稳定性监测</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6-%E5%BC%95%E5%AF%BC%E8%BE%93%E5%85%A5%E7%AA%81%E5%8F%98%E5%99%A8"><span class="toc-number">1.5.3.</span> <span class="toc-text">控制-引导输入突变器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E5%8F%82%E6%95%B0%E7%AA%81%E5%8F%98%E7%A9%BA%E9%97%B4"><span class="toc-number">1.5.3.1.</span> <span class="toc-text">控制参数突变空间</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%8D%E9%A6%88-%E9%A9%B1%E5%8A%A8%E5%8F%82%E6%95%B0%E8%BE%93%E5%85%A5%E7%AA%81%E5%8F%98%E5%99%A8"><span class="toc-number">1.5.3.2.</span> <span class="toc-text">反馈-驱动参数输入突变器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%9B%A0%E7%B4%A0"><span class="toc-number">1.5.3.3.</span> <span class="toc-text">环境因素</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E8%AE%BE%E7%BD%AE"><span class="toc-number">1.6.</span> <span class="toc-text">实验设置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%9A%84%E6%8E%A7%E5%88%B6%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.6.0.1.</span> <span class="toc-text">使用的控制程序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%BF%E7%9C%9F"><span class="toc-number">1.6.0.2.</span> <span class="toc-text">仿真</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GCS%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.6.0.3.</span> <span class="toc-text">GCS程序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6-%E5%BC%95%E5%AF%BC%E6%A3%80%E6%B5%8B%E5%99%A8"><span class="toc-number">1.6.0.4.</span> <span class="toc-text">控制-引导检测器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E8%AF%84%E4%BC%B0"><span class="toc-number">1.7.</span> <span class="toc-text">实验评估</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%91%E7%8E%B0%E8%BE%93%E5%85%A5%E9%AA%8C%E8%AF%81%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.7.0.1.</span> <span class="toc-text">发现输入验证漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E9%AA%8C%E8%AF%81%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-number">1.7.0.1.1.</span> <span class="toc-text">输入验证漏洞的分类</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E9%AA%8C%E8%AF%81%E6%BC%8F%E6%B4%9E%E6%A3%80%E6%B5%8B"><span class="toc-number">1.7.0.1.2.</span> <span class="toc-text">输入验证漏洞检测</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E9%AA%8C%E8%AF%81%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="toc-number">1.7.0.1.3.</span> <span class="toc-text">输入验证漏洞的影响</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E7%AA%81%E5%8F%98%E7%9A%84%E6%9C%89%E6%95%88%E6%80%A7"><span class="toc-number">1.7.0.2.</span> <span class="toc-text">输入突变的有效性</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E5%8F%82%E6%95%B0%E7%AA%81%E5%8F%98"><span class="toc-number">1.7.0.2.1.</span> <span class="toc-text">控制参数突变</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%9B%A0%E7%B4%A0%E9%80%A0%E6%88%90%E7%9A%84%E7%AA%81%E5%8F%98"><span class="toc-number">1.7.0.3.</span> <span class="toc-text">环境因素造成的突变</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E5%AE%9E%E4%BE%8B"><span class="toc-number">1.7.1.</span> <span class="toc-text">具体实例</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#case1%EF%BC%9A%E7%94%B1%E4%B8%80%E7%BB%B4%E7%AA%81%E5%8F%98%E5%8F%91%E7%8E%B0%E7%9A%84%E5%AF%BC%E8%87%B4%E2%80%9C%E4%B8%8D%E5%8F%AF%E6%81%A2%E5%A4%8D%E7%9A%84RV%E5%87%8F%E9%80%9F%E2%80%9D%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.7.1.0.1.</span> <span class="toc-text">case1：由一维突变发现的导致“不可恢复的RV减速”漏洞</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#case2%EF%BC%9A%E5%A4%9A%E7%BB%B4%E7%AA%81%E5%8F%98%E5%8F%91%E7%8E%B0%E5%AF%BC%E8%87%B4%E2%80%9C%E8%B7%AF%E5%BE%84%E9%9C%87%E8%8D%A1%E5%92%8C%E5%A5%94%E6%BA%83%E2%80%9D%E7%9A%84%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.7.1.0.2.</span> <span class="toc-text">case2：多维突变发现导致“路径震荡和奔溃”的漏洞</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#case3%EF%BC%9A%E9%A3%8E%E5%8A%9B%E7%AA%81%E5%8F%98%E5%AF%BC%E8%87%B4%E2%80%9C%E9%A3%8E%E6%B5%81%E8%B7%AF%E7%BA%BF%E2%80%9D%E7%9A%84%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.7.1.0.3.</span> <span class="toc-text">case3：风力突变导致“风流路线”的漏洞</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E5%B7%A5%E4%BD%9C"><span class="toc-number">1.8.</span> <span class="toc-text">相关工作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E8%AF%AD%E4%B9%89%E9%A9%B1%E5%8A%A8%E7%9A%84RV%E4%BF%9D%E6%8A%A4"><span class="toc-number">1.8.1.</span> <span class="toc-text">控制语义驱动的RV保护</span></a></li></ol></li></ol></li></ol>
+</div>
+
+
+  
+
+	<!-- async load  -->
+	<script>
+			function async(u, c) {
+				var d = document, t = 'script',
+						o = d.createElement(t),
+						s = d.getElementsByTagName(t)[0];
+				o.src = u;
+				if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+				s.parentNode.insertBefore(o, s);
+			}
+	</script>
+	<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+	<script>
+			async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+					anchors.options = {
+						visible: 'hover',
+						placement: 'left',
+						// icon: '#'
+					};
+					anchors.add().remove('.article-title').remove('.subheading').remove('.sidebar-container h5');
+			})
+	</script>
+	<style>
+			/* place left on bigger screen */
+			@media all and (min-width: 800px) {
+					.anchorjs-link{
+							position: absolute;
+							left: -0.75em;
+							font-size: 1.1em;
+							margin-top : -0.1em;
+					}
+			}
+	</style>
+
+
+
+
+<!-- UY BEGIN -->
+	<div id="gitment-container"></div>
+	<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+	<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+	<script src="/js/web-pinyin.js"></script>
+	<script>
+		function toUnicode(s){ 
+			return s.replace(/([\u4E00-\u9FA5]|[\uFE30-\uFFA0])/g,function(){
+			return "\\u" + RegExp["$1"].charCodeAt(0).toString(16);
+			});
+		}
+		var title = ''
+		var GitHub_id = 'Boseny'
+		var client_id = 'f40c67d0359a2646d2b1'
+		var client_secret = '1cbedbd1a1a2e4b42901aee3d7afe1856c1b7e2d'
+		var repo = 'boseny.me'
+		var gitment = new Gitment({
+		// id: '页面 ID', // 可选。默认为 location.href
+		// id:"11" ,
+		id: title,
+		title: title,
+		owner: GitHub_id,//'你的 GitHub ID',
+		repo: repo,//'存储评论的 repo',
+		oauth: {
+			client_id: client_id,//'你的 client ID',
+			client_secret: client_secret,//'你的 client secret',
+		},
+		})
+		gitment.render('gitment-container')
+	</script>
+<!-- UY END -->
+
+
+
+
+            </main>
+          </div>
+        </div>
+       
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/BosenY/Lap" target="_blank">Lap</a>
+    <br/><span id="busuanzi_container_site_uv"> 
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+    </br>
+    
+      
+        &copy; 2023 John Doe
+      
+    
+  </p>
+</footer>
+    
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-92842840-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+
+  </div>
+
+</div>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+  <script src="https://unpkg.com/draw-something/dist/draw.min.js"></script>
+  <script>
+    let maxNum = Number.parseInt('10')
+    let iconText = '❤'
+    let color = 'blue'
+    new Draw({maxNum, iconText, color})
+  </script>
+
+<script src="/js/index.js"></script>
+<script src="/js/search.js"></script>
+
+</body>
+</html>
